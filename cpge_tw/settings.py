@@ -103,6 +103,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+PATHWORD_HASHERS = (
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -125,3 +130,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     STATIC_PATH,
 ]
+
+LOGIN_URL = '/login'
