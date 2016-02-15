@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
-    url(r'^article/(?P<article_title_slug>[\w\-]+)/$',views.article, name='article'),
+    url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
+    url(r'^articlelist$',views.articlelist, name='articlelist'),
 ]

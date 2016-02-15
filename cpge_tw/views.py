@@ -14,14 +14,22 @@ def index(request):
 
     return render(request, 'cpge_tw/index.html', context_dict)
 
-def article(request,article_title_slug):
+def article(request,articleID):
     article_dict = {}
     try:
-        article = Article.objects.get(slug=article_title_slug)
+        article = Article.objects.get(id=articleID)
         article_dict['article'] = article
     except Article.DoesNotExist:
         pass
     return render(request, 'cpge_tw/article.html', article_dict)
+
+def articlelist(request):
+    articles = Article.objects.all()
+    context_dict = {
+        'articles' : articles 
+   }
+    return render(request, 'cpge_tw/article-list.html', context_dict)
+
 
 def register(request):
 
