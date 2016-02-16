@@ -11,6 +11,14 @@
     <script src="{% static "js/jquery.js" %}"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "js/bootstrap.min.js" %}"></script>
+
+    <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
+    {{ form.media }}
+    <script>
+    tinymce.init({
+        selector: '#mytextarea'
+    });
+    </script>
 </head>
 <body>
 

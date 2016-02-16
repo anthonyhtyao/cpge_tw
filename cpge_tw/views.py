@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm
-from reco.models import Article
-from django.contrib.auth import authenticate, login
+from reco.forms import UserForm, UserProfileForm, ArticleForm
+from reco.models import Article, UserProfile
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     article_list = Article.objects.order_by('-date')[:3]
@@ -11,7 +13,6 @@ def index(request):
     context_dict = {
         'newArticles': article_list
     }
-
     return render(request, 'cpge_tw/index.html', context_dict)
 
 def article(request,articleID):
@@ -19,6 +20,10 @@ def article(request,articleID):
     try:
         article = Article.objects.get(id=articleID)
         article_dict['article'] = article
+        if request.user.is_authenticated():
+            CurrentUser = UserProfile.objects.get(user = request.user)
+            isCurrentUser = CurrentUser==article.author
+            article_dict['isCurrentUser'] = isCurrentUser
     except Article.DoesNotExist:
         pass
     return render(request, 'cpge_tw/article.html', article_dict)
@@ -30,6 +35,38 @@ def articlelist(request):
    }
     return render(request, 'cpge_tw/article-list.html', context_dict)
 
+@login_required
+def createarticle(request):
+    if request.method == 'POST':
+        article_form = ArticleForm(request.POST)
+        current_user = UserProfile.objects.get(user = request.user)
+        if article_form.is_valid():
+            article = article_form.save(commit=False)
+            article.author = current_user
+            article.save()
+            return index(request)
+        else:
+            print(article_form.errors)
+    else:
+        article_form = ArticleForm()
+    return render(request, 'cpge_tw/create-article.html', {'form':article_form})
+
+@login_required
+def editarticle(request,articleID):
+    currentArticle = Article.objects.get(id=articleID)
+    if request.method == 'POST':
+        article_form = ArticleForm(request.POST)
+        if article_form.is_valid():
+            articleEdited = article_form.save(commit=False)
+            currentArticle.title = articleEdited.title
+            currentArticle.content = articleEdited.content
+            currentArticle.save()
+
+            return article(request,articleID)
+            print(article_form.errors)
+    else:
+        article_form = ArticleForm()
+    return render(request, 'cpge_tw/create-article.html', {'article':currentArticle, 'form':article_form})
 
 def register(request):
 
@@ -124,3 +161,11 @@ def user_login(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
         return render(request, 'cpge_tw/login.html', {})
+
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+
+    # Take the user back to the homepage.
+    return HttpResponseRedirect('/')

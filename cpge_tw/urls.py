@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from cpge_tw import views
-
+from django.conf.urls import include
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
+    url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editarticle, name='editarticle'),
     url(r'^articlelist$',views.articlelist, name='articlelist'),
+    url(r'^createarticle$',views.createarticle, name='createarticle'),
+    url(r'^tinymce/', include('tinymce.urls') ),
+    url(r'^logout/$', views.user_logout, name='logout'),
 ]

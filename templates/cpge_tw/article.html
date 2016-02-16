@@ -5,12 +5,18 @@
     <!-- Blog Post -->
 
     <!-- Title -->
-    <h1>{{article.title}}</h1>
+    <h1>{{article.title}}</h1>     
+
 
     <!-- Author -->
     <p class="lead">
         by <a href="#">{{article.author.name}}</a>
+
     </p>
+    {% if isCurrentUser %}
+    <a href="edit"><p><span class="glyphicon glyphicon-pencil"></span> Edit</p></a>
+    {% endif %}
+
 
     <hr>
 
@@ -20,7 +26,7 @@
     <hr>
 
     <!-- Preview Image -->
-    <img class="img-responsive" src="http://placehold.it/900x300" alt="">
+    <!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
 
     <hr>
 
@@ -43,6 +49,7 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+
 
     <hr>
 

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block body_block %}
+
+{% if article %}
+	<form id = "article_form" method="post" action="/article/{{article.id}}/edit">
+{% else %}
+	<form id = "article_form" method="post" action="/createarticle">
+{% endif %}
+	{% csrf_token %}
+	Title : <input id="title" type="text" name="title" maxlength="128" value="{{article.title}}">
+	<textarea id="mytextarea" type="text" name="content" cols ="80" rows="20"} >{{article.content}} </textarea>
+	
+{% if article %}
+	<input type="submit" name="submit" value="Update">
+{% else %}
+	<input type="submit" name="submit" value="Create Article">
+{% endif %}
+</form>
+{% endblock %}

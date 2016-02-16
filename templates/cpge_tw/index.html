@@ -64,7 +64,7 @@
                             </div>
                             <div class="panel-body">
                                 <p>
-                        	    {{article.content}}
+                        	    {{article.content|safe}}
                                 </p>
                                 <div> by {{article.author.name}} </div>
                                 <a href="/article/{{article.id}}" class="btn btn-default">Learn More</a>
