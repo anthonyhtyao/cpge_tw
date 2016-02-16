@@ -13,8 +13,8 @@
         by <a href="#">{{article.author.name}}</a>
 
     </p>
-    {% if isCurrentUser %}
-    <a href="edit"><p><span class="glyphicon glyphicon-pencil"></span> Edit</p></a>
+    {% if user == article.author.user %}
+        <a href="edit"><p><span class="glyphicon glyphicon-edit"></span> Edit</p></a>
     {% endif %}
 
 

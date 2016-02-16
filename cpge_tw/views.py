@@ -20,19 +20,15 @@ def article(request,articleID):
     try:
         article = Article.objects.get(id=articleID)
         article_dict['article'] = article
-        if request.user.is_authenticated():
-            CurrentUser = UserProfile.objects.get(user = request.user)
-            isCurrentUser = CurrentUser==article.author
-            article_dict['isCurrentUser'] = isCurrentUser
     except Article.DoesNotExist:
         pass
     return render(request, 'cpge_tw/article.html', article_dict)
 
 def articlelist(request):
-    articles = Article.objects.all()
+    articles = Article.objects.all()    
     context_dict = {
         'articles' : articles 
-   }
+    }
     return render(request, 'cpge_tw/article-list.html', context_dict)
 
 @login_required

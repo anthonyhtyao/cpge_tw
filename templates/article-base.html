@@ -15,6 +15,9 @@
 
                 <!-- Blog Search Well -->
                 <div class="well">
+                    {% if user.is_authenticated %}
+                        <a href="/createarticle"> + New Article </a>
+                    {% endif %}
                     <h4>Blog Search</h4>
                     <div class="input-group">
                         <input type="text" class="form-control">
