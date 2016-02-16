@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from reco.models import UserProfile, Article
+from reco.models import UserProfile, Article, Comment
 from tinymce.widgets import TinyMCE
 
 class UserForm(forms.ModelForm):
@@ -23,4 +23,12 @@ class ArticleForm(forms.ModelForm):
 		model = Article
 		fields = ('title', 'content')
 		#exclude = ["user"]
+
+class CommentForm(forms.ModelForm):
+	content = forms.CharField()
+
+	class Meta:
+		model = Comment
+		fields = ('content',)
+		
 			
