@@ -22,7 +22,7 @@ def article(request,articleID):
         article = Article.objects.get(id=articleID)
         article_dict['article'] = article
         articleType = ContentType.objects.get_for_model(article)
-        comments = Comment.objects.filter(content_type = articleType.id, object_id = articleID)
+        comments = Comment.objects.filter(content_type = articleType.id, object_id = articleID).order_by('-date')
         article_dict['comments'] = comments
 
     except Article.DoesNotExist:
@@ -40,10 +40,13 @@ def articlecomment(request, articleID):
             if request.user.is_authenticated():
                 comment.author=UserProfile.objects.get(user = request.user)
             comment.save()
-            return article(request, articleID)
+            return HttpResponseRedirect('/article/'+articleID)
+
+def replycomment(request):
+    pass
 
 def articlelist(request):
-    articles = Article.objects.all()    
+    articles = Article.objects.order_by('-date')    
     context_dict = {
         'articles' : articles 
     }
