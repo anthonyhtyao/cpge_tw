@@ -40,7 +40,7 @@ def createarticle(request):
             article = article_form.save(commit=False)
             article.author = current_user
             article.save()
-            return index(request)
+            return HttpResponseRedirect('/articlelist')
         else:
             print(article_form.errors)
     else:
@@ -156,7 +156,8 @@ def user_login(request):
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'cpge_tw/login.html', {})
+        # return render(request, 'cpge_tw/login.html', {})
+        pass
 
 @login_required
 def user_logout(request):
