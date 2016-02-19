@@ -65,8 +65,7 @@
             </a>
             <div class="media-body">
                 <h4 class="media-heading">{% if comment.author %} {{comment.author.name}} {% else %} unknown {% endif%}
-                    <small>{{comment.date}}<a class="open-reply" data-id="{{comment.content}}" comment-author="{{comment.author.name}}" data-toggle="modal" data-target="#comment-modal"> Reply </a></small>
-                    {# <button data-toggle="modal" data-target="#myModal">Reply</button> #}
+                    <small>{{comment.date}}<a class="open-reply" comment-content="{{comment.content}}" comment-date="{{comment.date}}" comment-author="{{comment.author.name}}" data-toggle="modal" data-target="#comment-modal"> Reply </a></small>
                 </h4>
                 {{comment.content}}
             </div>
@@ -86,11 +85,12 @@
         <button type="button" class="close" data-dismiss="modal">&times;</button>
             <div class="media-body">
                 <h4 id="modal-media-heading"></h4>
+                <small class="pull-right" id="modal-media-date"></small>
+                <p id="modal-media-content"></p>
 
             </div>
       </div>
       <div class="modal-body">
-        <p id="modal-pid"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

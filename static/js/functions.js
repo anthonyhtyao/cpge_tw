@@ -7,8 +7,10 @@
 // });
 
 $(document).on("click", ".open-reply", function () {
-     var myBookId = $(this).attr("data-id");
-     var author = $(this).attr("comment-author")
-     $("#modal-pid").html(myBookId);
-     $("#modal-media-heading").html(author)
+     var content = $(this).attr("comment-content");
+     var author = $(this).attr("comment-author");
+     var date = $(this).attr("comment-date");
+     $("#modal-media-content").html(content);
+     $("#modal-media-date").html(date);
+     $("#modal-media-heading").html(author);
 });
