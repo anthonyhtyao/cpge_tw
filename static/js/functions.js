@@ -8,7 +8,6 @@ $(document).ready( function() {
     $("#loginErrorDialog").dialog();
 
     $("#login_form").submit(function (event) {
-        var currentLocation = window.location;       
         $.ajax({
             type:"POST",
             url:"/login/",
