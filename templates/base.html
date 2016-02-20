@@ -5,19 +5,30 @@
     <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{% static "css/modern-business.css" %}" rel="stylesheet">
-    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <link href="{% static "css/blog-post.css" %}" rel="stylesheet">
     <!-- jQuery -->
-    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "js/bootstrap.min.js" %}"></script>
 
     <script src="{% static "js/tinymce/tinymce.min.js" %}"></script>
+    <script src="{% static "js/functions.js" %}"></script>
     {{ form.media }}
     <script>
     tinymce.init({
         selector: '#mytextarea'
     });
+    </script>
+    <!-- Script to Activate the Carousel -->
+    <script>
+    $('.carousel').carousel({
+        interval: 5000 //changes the speed
+    })
     </script>
 </head>
 <body>
@@ -101,6 +112,11 @@
                             </li>
                         </ul>
                     </li>
+                {% if user.is_authenticated%}
+                    <li>
+                        <a href="#"><span>{{ user.username }}</span></a>
+                    </li>
+                {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -115,17 +131,18 @@
     <div class="container">
 
         {% block body_block %}{% endblock %}
-
-        <!-- Footer -->
+<!-- Footer -->
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
-                    {% if user.is_authenticated %}
-                        <a href="/logout"><span class ="glyphicon glyphicon-log-out"></span></a>
-                    {% else %}
-                        <a href="/login"><span class ="glyphicon glyphicon-log-in"></span></a>
-                    {% endif%}
+                    <center>
+                        <span>Copyright &copy; Your Website 2014</span>
+                        {% if user.is_authenticated %}
+                            <a href="/logout"><span class ="glyphicon glyphicon-log-out"></span></a>
+                        {% else %}
+                            <a id="login-btn" href="#"><span class ="glyphicon glyphicon-log-in"></span></a>
+                        {% endif%}
+                    </center>
                 </div>
             </div>
         </footer>
@@ -133,18 +150,30 @@
     </div>
     <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    
+<div id="dialog" class="login-dialog" title="Log In">
+    <form id="login_form" action="/login/" method="post">
+        {% csrf_token %}
+        <p> User: </p>
+        <input id="username" name="username" type="text">
+        <br/>
+        <p> Password: </p>
+        <input id="password" name="password" type="password">
+        <br/>
+        <input type="submit" value="Log In">
+    </form>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
-    <!-- Script to Activate the Carousel -->
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
-    </script>
+<script>
+    var loginMsg = "{{loginMsg}}";
+    if (loginMsg != "") {
+        alert(loginMsg);
+        window.location = "/";
+        $("dialog").dialog(open);
+    }
+</script>
+
 
 </body>
 </html>
