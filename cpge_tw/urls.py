@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
     url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editarticle, name='editarticle'),
     url(r'^articlelist$',views.articlelist, name='articlelist'),
+    url(r'^questionlist$',views.questionlist, name='questionlist'),
     url(r'^createarticle$',views.createarticle, name='createarticle'),
     url(r'^tinymce/', include('tinymce.urls') ),
     url(r'^logout/$', views.user_logout, name='logout'),
