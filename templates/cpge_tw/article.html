@@ -65,16 +65,12 @@
             </a>
             <div class="media-body">
                 <h4 class="media-heading">{% if comment.author %} {{comment.author.name}} {% else %} unknown {% endif%}
-                    <small>{{comment.date}}<a class="open-reply" comment-content="{{comment.content}}" comment-date="{{comment.date}}" comment-author="{{comment.author.name}}" data-toggle="modal" data-target="#comment-modal"> Reply </a></small>
+                    <small>{{comment.date}}<a class="open-reply" comment-id="{{comment.id}}" comment-content="{{comment.content}}" comment-date="{{comment.date}}" comment-author="{{comment.author.name}}" data-toggle="modal" data-target="#comment-modal"> Reply </a></small>
                 </h4>
                 {{comment.content}}
             </div>
         </div>
     {% endfor %}
-    
-<div id="reply-dialog" title="Reply this comment">
-    {# This is reply div #}
-</div>
 
 <div id="comment-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -87,7 +83,6 @@
                 <h4 id="modal-media-heading"></h4>
                 <small class="pull-right" id="modal-media-date"></small>
                 <p id="modal-media-content"></p>
-
             </div>
       </div>
       <div class="modal-body">

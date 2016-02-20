@@ -42,8 +42,11 @@ def articlecomment(request, articleID):
             comment.save()
             return HttpResponseRedirect('/article/'+articleID)
 
-def replycomment(request):
-    pass
+def replycomment(request, commentID):
+    comment = Comment.objects.get(id=commentID)
+    commentType = ContentType.objects.get_for_model(comment)
+    replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID).order_by('-date')
+    return render(request, 'get-replys.html', {'replys': replys})
 
 def articlelist(request):
     articles = Article.objects.order_by('-date')    

@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
     url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editarticle, name='editarticle'),
     url(r'^article/(?P<articleID>[0-9]*)/articlecomment$',views.articlecomment, name='articlecomment'),
+    url(r'^articlecomment/(?P<commentID>[0-9]*)$',views.replycomment, name='replycomment'),
     url(r'^articlelist$',views.articlelist, name='articlelist'),
     url(r'^createarticle$',views.createarticle, name='createarticle'),
     url(r'^tinymce/', include('tinymce.urls') ),
