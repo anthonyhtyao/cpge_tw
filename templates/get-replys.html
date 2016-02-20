@@ -1,6 +1,6 @@
 {% for reply in replys %}
 <div class="col-md-12">
-    <h4 class="media-heading">{{reply.author.name}}
+    <h4 class="media-heading">{% if reply.author %} {{reply.author.name}} {% else %} unknown {% endif%}
         <small>{{reply.date}}</small>
     </h4>
     {{reply.content}}
