@@ -112,6 +112,11 @@
                             </li>
                         </ul>
                     </li>
+                {% if user.is_authenticated%}
+                    <li>
+                        <a href="#"><span>{{ user.username }}</span></a>
+                    </li>
+                {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -126,17 +131,18 @@
     <div class="container">
 
         {% block body_block %}{% endblock %}
-
-        <!-- Footer -->
+<!-- Footer -->
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
-                    {% if user.is_authenticated %}
-                        <a href="/logout"><span class ="glyphicon glyphicon-log-out"></span></a>
-                    {% else %}
-                        <a id="login-btn" href="#"><span class ="glyphicon glyphicon-log-in"></span></a>
-                    {% endif%}
+                    <center>
+                        <span>Copyright &copy; Your Website 2014</span>
+                        {% if user.is_authenticated %}
+                            <a href="/logout"><span class ="glyphicon glyphicon-log-out"></span></a>
+                        {% else %}
+                            <a id="login-btn" href="#"><span class ="glyphicon glyphicon-log-in"></span></a>
+                        {% endif%}
+                    </center>
                 </div>
             </div>
         </footer>
@@ -148,16 +154,20 @@
 <div id="dialog" class="login-dialog" title="Log In">
     <form id="login_form" action="/login/" method="post">
         {% csrf_token %}
-        <label> User: </label>
+        <p> User: </p>
         <input id="username" name="username" type="text">
         <br/>
-        <label> Password: </label>
+        <p> Password: </p>
         <input id="password" name="password" type="password">
         <br/>
         <input type="submit" value="Log In">
     </form>
 </div>
-
+{% if loginError %}
+<div id="loginErrorDialog">
+<p>Error</p>
+</div>
+{% endif %}        
 
 </body>
 </html>

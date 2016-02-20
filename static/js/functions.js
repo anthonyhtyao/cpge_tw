@@ -4,6 +4,18 @@ $(document).ready( function() {
 	    $("#dialog").dialog("open");
 	    return false;
 	});
-	$("#dialog").dialog({autoOpen : false, modal : true, show : "blind", hide : "blind"});  
+    $("#dialog").dialog({autoOpen : false, modal : true, show : "blind", hide : "blind"});  
+    $("#loginErrorDialog").dialog();
+
+    $("#login_form").submit(function (event) {
+        var currentLocation = window.location;       
+        $.ajax({
+            type:"POST",
+            url:"/login/",
+            data:$("#login_form").serialize(),
+        });
+    });
+
 });
+
 
