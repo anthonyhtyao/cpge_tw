@@ -6,12 +6,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 
-def index(request):
+def index(request, loginMsg=""):
     article_list = Article.objects.order_by('-date')[:3]
     for article in article_list:
         article.content = article.content[:6]
     context_dict = {
         'newArticles': article_list,
+        'loginMsg' : loginMsg,
     }
     return render(request, 'cpge_tw/index.html', context_dict)
 
@@ -144,9 +145,9 @@ def user_login(request):
                 return HttpResponseRedirect('/')
             else:
                 # An inactive account was used - no logging in!
-                pass
+                return index(request, "Wait for activation")
         else:
-           pass 
+            return index(request, "Login Error")
             # Bad login details were provided. So we can't log the user in.
 
     # The request is not a HTTP POST, so display the login form.
@@ -155,7 +156,7 @@ def user_login(request):
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
         # return render(request, 'cpge_tw/login.html', {})
-        pass
+        return index(request, "Login Error")
 
 @login_required
 def user_logout(request):

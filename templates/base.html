@@ -163,11 +163,17 @@
         <input type="submit" value="Log In">
     </form>
 </div>
-{% if loginError %}
-<div id="loginErrorDialog">
-<p>Error</p>
-</div>
-{% endif %}        
+
+
+<script>
+    var loginMsg = "{{loginMsg}}";
+    if (loginMsg != "") {
+        alert(loginMsg);
+        window.location = "/";
+        $("dialog").dialog(open);
+    }
+</script>
+
 
 </body>
 </html>
