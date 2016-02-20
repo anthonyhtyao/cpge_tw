@@ -5,3 +5,5 @@ from reco.models import *
 admin.site.register(UserProfile)
 admin.site.register(Article)
 admin.site.register(Comment)
+admin.site.register(Question)
+admin.site.register(Answer)

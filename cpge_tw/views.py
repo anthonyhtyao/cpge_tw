@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
-from reco.models import Article, UserProfile, Comment
+from reco.forms import *
 from django.contrib.contenttypes.models import ContentType
+from reco.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -71,6 +71,14 @@ def articlelist(request):
         'articles' : articles 
     }
     return render(request, 'cpge_tw/article-list.html', context_dict)
+
+def questionlist(request):
+    questions = Question.objects.all()
+    answers = Answer.objects.all()
+    context_dict = {
+        'questions' : questions,
+    }
+    return render(request, 'cpge_tw/questionList.html', context_dict)
 
 @login_required
 def createarticle(request):

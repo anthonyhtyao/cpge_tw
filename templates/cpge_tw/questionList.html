@@ -1,0 +1,33 @@
+{% extends 'article-base.html' %}
+{% block body_block %}
+
+<div class="container">
+    <ul class="chat">
+    {% for question in questions %}
+                        <li class="left clearfix col-md-10"><span class="chat-img pull-left">
+                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{ question.title }}</strong> <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>{{ question.date }}</small>
+                                </div>
+                                <p>{{ question.content }}</p>
+                            </div>
+                        </li>
+                        <li class="right clearfix col-md-offset-2 col-md-10"><span class="chat-img pull-right">
+                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{ question.answer.date}}</small>
+                                    <strong class="pull-right primary-font">{{ question.answer.author }}</strong>
+                                </div>
+                                <p>{{ question.answer.content }}</p>
+                            </div>
+                        </li>
+
+    {% endfor %}
+    </ul>
+</div>    
+{% endblock%}
