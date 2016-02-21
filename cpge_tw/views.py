@@ -1,17 +1,19 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm
-from reco.models import Article, UserProfile
+from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
+from reco.models import Article, UserProfile, Comment
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 
-def index(request):
+def index(request, loginMsg=""):
     article_list = Article.objects.order_by('-date')[:3]
     for article in article_list:
         article.content = article.content[:6]
     context_dict = {
-        'newArticles': article_list
+        'newArticles': article_list,
+        'loginMsg' : loginMsg,
     }
     return render(request, 'cpge_tw/index.html', context_dict)
 
@@ -20,12 +22,51 @@ def article(request,articleID):
     try:
         article = Article.objects.get(id=articleID)
         article_dict['article'] = article
+        articleType = ContentType.objects.get_for_model(article)
+        comments = Comment.objects.filter(content_type = articleType.id, object_id = articleID).order_by('-date')
+        article_dict['comments'] = comments
+
     except Article.DoesNotExist:
         pass
     return render(request, 'cpge_tw/article.html', article_dict)
 
+def articlecomment(request, articleID):
+    if request.method == 'POST':
+        currentArticle = Article.objects.get(id=articleID)  
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            commentweb = comment_form.save(commit=False)
+            comment = Comment(parent=currentArticle)
+            comment.content = commentweb.content
+            if commentweb.name:
+                comment.name = commentweb.name
+            if request.user.is_authenticated():
+                comment.author=UserProfile.objects.get(user = request.user)
+            comment.save()
+            return HttpResponseRedirect('/article/'+articleID)
+
+def replycomment(request, commentID, articleID):
+    comment = Comment.objects.get(id=commentID)
+    if request.method == 'GET':        
+        commentType = ContentType.objects.get_for_model(comment)
+        replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID)
+        return render(request, 'get-replys.html', {'replys': replys})
+    elif request.method == 'POST':
+        reply_form = CommentForm(request.POST)
+        if reply_form.is_valid():
+            reply_ = reply_form.save(commit=False)
+            reply = Comment(parent=comment)
+            reply.content = reply_.content
+            if reply_.name:
+                reply.name = reply_.name
+            if request.user.is_authenticated():
+                reply.author=UserProfile.objects.get(user = request.user)
+            reply.save()
+        return HttpResponseRedirect('/article/'+articleID)
+
+
 def articlelist(request):
-    articles = Article.objects.all()    
+    articles = Article.objects.order_by('-date')    
     context_dict = {
         'articles' : articles 
     }
@@ -40,7 +81,7 @@ def createarticle(request):
             article = article_form.save(commit=False)
             article.author = current_user
             article.save()
-            return index(request)
+            return HttpResponseRedirect('/articlelist')
         else:
             print(article_form.errors)
     else:
@@ -118,16 +159,15 @@ def register(request):
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
 
 def user_login(request):
-
     # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
+    if request.POST:
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
                 # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
                 # because the request.POST.get('<variable>') returns None, if the value does not exist,
                 # while the request.POST['<variable>'] will raise key error exception
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST['username']
+        password = request.POST['password']
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
@@ -145,18 +185,18 @@ def user_login(request):
                 return HttpResponseRedirect('/')
             else:
                 # An inactive account was used - no logging in!
-                return HttpResponse("Your account is not activated.")
+                return index(request, "Wait for activation")
         else:
+            return index(request, "Login Error")
             # Bad login details were provided. So we can't log the user in.
-            print ("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
     # This scenario would most likely be a HTTP GET.
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'cpge_tw/login.html', {})
+        # return render(request, 'cpge_tw/login.html', {})
+        return index(request, "Login Error")
 
 @login_required
 def user_logout(request):
