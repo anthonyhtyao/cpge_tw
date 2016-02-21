@@ -6,12 +6,13 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 
 
-def index(request):
+def index(request, loginMsg=""):
     article_list = Article.objects.order_by('-date')[:3]
     for article in article_list:
         article.content = article.content[:6]
     context_dict = {
-        'newArticles': article_list
+        'newArticles': article_list,
+        'loginMsg' : loginMsg,
     }
     return render(request, 'cpge_tw/index.html', context_dict)
 
@@ -40,7 +41,7 @@ def createarticle(request):
             article = article_form.save(commit=False)
             article.author = current_user
             article.save()
-            return index(request)
+            return HttpResponseRedirect('/articlelist')
         else:
             print(article_form.errors)
     else:
@@ -118,16 +119,15 @@ def register(request):
             {'user_form': user_form, 'profile_form': profile_form, 'registered': registered} )
 
 def user_login(request):
-
     # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
+    if request.POST:
         # Gather the username and password provided by the user.
         # This information is obtained from the login form.
                 # We use request.POST.get('<variable>') as opposed to request.POST['<variable>'],
                 # because the request.POST.get('<variable>') returns None, if the value does not exist,
                 # while the request.POST['<variable>'] will raise key error exception
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST['username']
+        password = request.POST['password']
 
         # Use Django's machinery to attempt to see if the username/password
         # combination is valid - a User object is returned if it is.
@@ -145,18 +145,18 @@ def user_login(request):
                 return HttpResponseRedirect('/')
             else:
                 # An inactive account was used - no logging in!
-                return HttpResponse("Your account is not activated.")
+                return index(request, "Wait for activation")
         else:
+            return index(request, "Login Error")
             # Bad login details were provided. So we can't log the user in.
-            print ("Invalid login details: {0}, {1}".format(username, password))
-            return HttpResponse("Invalid login details supplied.")
 
     # The request is not a HTTP POST, so display the login form.
     # This scenario would most likely be a HTTP GET.
     else:
         # No context variables to pass to the template system, hence the
         # blank dictionary object...
-        return render(request, 'cpge_tw/login.html', {})
+        # return render(request, 'cpge_tw/login.html', {})
+        return index(request, "Login Error")
 
 @login_required
 def user_logout(request):
