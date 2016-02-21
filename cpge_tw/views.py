@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm, ReplyForm
+from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
 from reco.models import Article, UserProfile, Comment
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
@@ -37,6 +37,8 @@ def articlecomment(request, articleID):
             commentweb = comment_form.save(commit=False)
             comment = Comment(parent=currentArticle)
             comment.content = commentweb.content
+            if commentweb.name:
+                comment.name = commentweb.name
             if request.user.is_authenticated():
                 comment.author=UserProfile.objects.get(user = request.user)
             comment.save()
@@ -49,11 +51,13 @@ def replycomment(request, commentID, articleID):
         replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID)
         return render(request, 'get-replys.html', {'replys': replys})
     elif request.method == 'POST':
-        reply_form = ReplyForm(request.POST)
+        reply_form = CommentForm(request.POST)
         if reply_form.is_valid():
             reply_ = reply_form.save(commit=False)
             reply = Comment(parent=comment)
             reply.content = reply_.content
+            if reply_.name:
+                reply.name = reply_.name
             if request.user.is_authenticated():
                 reply.author=UserProfile.objects.get(user = request.user)
             reply.save()

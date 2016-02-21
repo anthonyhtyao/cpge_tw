@@ -45,6 +45,9 @@
         <form method="post" role="form" action="/article/{{article.id}}/articlecomment">
             <div class="form-group">
                 {% csrf_token %}
+                {% if user.is_authenticated %} {% else %}
+                Name : <input id="name" type="text" name="name" maxlength="128">
+                {% endif %}
                 <textarea class="form-control" name="content" rows="3"></textarea>
             </div>
             <input type="submit" name="submit" class="btn btn-primary" value="Submit">
@@ -92,6 +95,9 @@
         <form id="reply-form" method="post" role="form" action="">
             <div class="form-group">
                 {% csrf_token %}
+                {% if user.is_authenticated %} {% else %}
+                Name : <input id="name" type="text" name="name" maxlength="128">
+                {% endif %}
                 <textarea class="form-control" name="content" rows="3"></textarea>
             </div>
             <input type="submit" name="submit" class="btn btn-primary" value="Submit">
