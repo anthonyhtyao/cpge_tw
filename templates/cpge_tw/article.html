@@ -64,7 +64,7 @@
                 <img class="media-object" src="http://placehold.it/64" alt="">
             </a>
             <div class="media-body">
-                <h4 class="media-heading">{% if comment.author %} {{comment.author.name}} {% else %} unknown {% endif%}
+                <h4 class="media-heading">{{comment.name}} 
                     <small>{{comment.date}}<a class="open-reply" comment-id="{{comment.id}}" comment-content="{{comment.content}}" comment-date="{{comment.date}}" comment-author="{{comment.author.name}}" data-toggle="modal" data-target="#comment-modal"> Reply </a></small>
                 </h4>
                 {{comment.content}}
