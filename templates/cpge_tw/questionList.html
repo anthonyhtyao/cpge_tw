@@ -2,6 +2,7 @@
 {% block body_block %}
 
 <div class="container">
+<div class="col-md-12">
     <ul class="chat">
     {% for question in questions %}
                         <li class="left clearfix col-md-10"><span class="chat-img pull-left">
@@ -29,5 +30,22 @@
 
     {% endfor %}
     </ul>
+</div>
+<div class="col-md-12">
+    <button id="leaveQuestion">Leave a question</button>
+</div>
+<!--Post question-->
+    <div id="postQuestion" class="well col-md-9">
+        <h4>Leave a question</h4>
+        <form method="post" role="form" action="/addQuestion">
+            <div class = "form-group">
+                {% csrf_token %}
+                title:<input id="title" type="text" name="text" maxlength="128">
+                <textarea class="form-controle col-md-12" name="content" rows="2"></textarea>
+            </div>
+            <input type="submit" name="submit" class="btn btn-primary" value="submit">
+        </form>
+    </div>
+
 </div>    
 {% endblock%}
