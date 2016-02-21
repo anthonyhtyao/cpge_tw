@@ -14,6 +14,7 @@ $(document).on("click", ".open-reply", function () {
      $("#modal-media-content").html(content);
      $("#modal-media-date").html(date);
      $("#modal-media-heading").html(author);
+     $("#reply-form").attr('action', '/articlecomment/'+id)
      $.get('/articlecomment/'+id, function(data, status){
         // alert("Data: " + data + "\nStatus: " + status);
         $(".modal-body").html(data);

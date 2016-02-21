@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
+from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm, ReplyForm
 from reco.models import Article, UserProfile, Comment
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
@@ -44,9 +44,21 @@ def articlecomment(request, articleID):
 
 def replycomment(request, commentID):
     comment = Comment.objects.get(id=commentID)
-    commentType = ContentType.objects.get_for_model(comment)
-    replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID).order_by('-date')
-    return render(request, 'get-replys.html', {'replys': replys})
+    if request.method == 'GET':        
+        commentType = ContentType.objects.get_for_model(comment)
+        replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID)
+        return render(request, 'get-replys.html', {'replys': replys})
+    elif request.method == 'POST':
+        reply_form = ReplyForm(request.POST)
+        if reply_form.is_valid():
+            reply_ = reply_form.save(commit=False)
+            reply = Comment(parent=comment)
+            reply.content = reply_.content
+            if request.user.is_authenticated():
+                reply.author=UserProfile.objects.get(user = request.user)
+            reply.save()
+        return HttpResponseRedirect('/articlelist')
+
 
 def articlelist(request):
     articles = Article.objects.order_by('-date')    

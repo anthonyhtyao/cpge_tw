@@ -79,7 +79,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <div class="media-body">
+            <div class="media-body col-md-12">
                 <h4 id="modal-media-heading"></h4>
                 <small class="pull-right" id="modal-media-date"></small>
                 <p id="modal-media-content"></p>
@@ -88,6 +88,14 @@
       <div class="modal-body">
       </div>
       <div class="modal-footer">
+        <h4>Reply this comment:</h4>
+        <form id="reply-form" method="post" role="form" action="">
+            <div class="form-group">
+                {% csrf_token %}
+                <textarea class="form-control" name="content" rows="3"></textarea>
+            </div>
+            <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+        </form>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
     </div>

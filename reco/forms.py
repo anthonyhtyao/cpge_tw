@@ -30,5 +30,11 @@ class CommentForm(forms.ModelForm):
 	class Meta:
 		model = Comment
 		fields = ('content',)
-		
-			
+
+class ReplyForm(forms.ModelForm):
+    content = forms.CharField()
+    # name = forms.CharField(max_length = 128)
+	
+    class Meta:
+        model = Comment
+        fields = ('content',)
