@@ -1,11 +1,3 @@
-// $(document).ready( function() {
-
-// 	$(".reply-comment").click( function() {
-// 		$("#reply-dialog").dialog("open");
-// 	});
-// 	$("#reply-dialog").dialog({autoOpen : false, modal : true, show : "blind", hide : "blind"});  
-// });
-
 $(document).on("click", ".open-reply", function () {
      var content = $(this).attr("comment-content");
      var author = $(this).attr("comment-author");
@@ -20,4 +12,22 @@ $(document).on("click", ".open-reply", function () {
         // alert("Data: " + data + "\nStatus: " + status);
         $(".modal-body").html(data);
     });
+});
+$(document).ready( function() {
+
+    $("#login-btn").click( function (event) {
+	    $("#dialog").dialog("open");
+	    return false;
+	});
+    $("#dialog").dialog({autoOpen : false, modal : true, show : "blind", hide : "blind"});  
+    $("#loginErrorDialog").dialog();
+
+    $("#login_form").submit(function (event) {
+        $.ajax({
+            type:"POST",
+            url:"/login/",
+            data:$("#login_form").serialize(),
+        });
+    });
+
 });
