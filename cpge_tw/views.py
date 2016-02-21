@@ -42,7 +42,7 @@ def articlecomment(request, articleID):
             comment.save()
             return HttpResponseRedirect('/article/'+articleID)
 
-def replycomment(request, commentID):
+def replycomment(request, commentID, articleID):
     comment = Comment.objects.get(id=commentID)
     if request.method == 'GET':        
         commentType = ContentType.objects.get_for_model(comment)
@@ -57,7 +57,7 @@ def replycomment(request, commentID):
             if request.user.is_authenticated():
                 reply.author=UserProfile.objects.get(user = request.user)
             reply.save()
-        return HttpResponseRedirect('/articlelist')
+        return HttpResponseRedirect('/article/'+articleID)
 
 
 def articlelist(request):
