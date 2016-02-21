@@ -1,0 +1,9 @@
+{% for reply in replys %}
+<div>
+    <h4 class="media-heading">{{reply.name}} 
+        <small>{{reply.date}}</small>
+    </h4>
+    {{reply.content}}
+    <hr>
+</div>
+{% endfor %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm
-from reco.models import Article, UserProfile
+from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
+from reco.models import Article, UserProfile, Comment
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -21,12 +22,51 @@ def article(request,articleID):
     try:
         article = Article.objects.get(id=articleID)
         article_dict['article'] = article
+        articleType = ContentType.objects.get_for_model(article)
+        comments = Comment.objects.filter(content_type = articleType.id, object_id = articleID).order_by('-date')
+        article_dict['comments'] = comments
+
     except Article.DoesNotExist:
         pass
     return render(request, 'cpge_tw/article.html', article_dict)
 
+def articlecomment(request, articleID):
+    if request.method == 'POST':
+        currentArticle = Article.objects.get(id=articleID)  
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            commentweb = comment_form.save(commit=False)
+            comment = Comment(parent=currentArticle)
+            comment.content = commentweb.content
+            if commentweb.name:
+                comment.name = commentweb.name
+            if request.user.is_authenticated():
+                comment.author=UserProfile.objects.get(user = request.user)
+            comment.save()
+            return HttpResponseRedirect('/article/'+articleID)
+
+def replycomment(request, commentID, articleID):
+    comment = Comment.objects.get(id=commentID)
+    if request.method == 'GET':        
+        commentType = ContentType.objects.get_for_model(comment)
+        replys = Comment.objects.filter(content_type = commentType.id, object_id = commentID)
+        return render(request, 'get-replys.html', {'replys': replys})
+    elif request.method == 'POST':
+        reply_form = CommentForm(request.POST)
+        if reply_form.is_valid():
+            reply_ = reply_form.save(commit=False)
+            reply = Comment(parent=comment)
+            reply.content = reply_.content
+            if reply_.name:
+                reply.name = reply_.name
+            if request.user.is_authenticated():
+                reply.author=UserProfile.objects.get(user = request.user)
+            reply.save()
+        return HttpResponseRedirect('/article/'+articleID)
+
+
 def articlelist(request):
-    articles = Article.objects.all()    
+    articles = Article.objects.order_by('-date')    
     context_dict = {
         'articles' : articles 
     }
