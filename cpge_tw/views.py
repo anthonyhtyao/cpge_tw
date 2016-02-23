@@ -64,6 +64,24 @@ def replycomment(request, commentID, articleID):
             reply.save()
         return HttpResponseRedirect('/article/'+articleID)
 
+@login_required
+def answer(request, questionID):
+    question = Question.objects.get(id = questionID)
+    print(question.id)
+    if request.method == "POST":
+        reply_form = AnswerForm(request.POST)
+        if reply_form.is_valid():
+            try:
+                 answer = question.answer
+                 print(answer.id)
+                 answer_ = reply_form.save(commit=False)
+                 answer.content = answer_.content
+            except:
+                answer = reply_form.save(commit=False)
+            answer.author = UserProfile.objects.get(user = request.user)
+            answer.question = question
+            answer.save()
+    return HttpResponseRedirect('/questionlist/')
 
 def articlelist(request):
     articles = Article.objects.order_by('-date')    
@@ -79,6 +97,14 @@ def questionlist(request):
         'questions' : questions,
     }
     return render(request, 'cpge_tw/questionList.html', context_dict)
+
+def addquestion(request):
+    if request.method == 'POST':
+        question_form = QuestionForm(request.POST)
+        if question_form.is_valid():
+            question = question_form.save()
+            question.save()
+    return HttpResponseRedirect('/questionlist')
 
 @login_required
 def createarticle(request):
