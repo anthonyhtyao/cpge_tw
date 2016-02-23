@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from reco.forms import UserForm, UserProfileForm, ArticleForm, CommentForm
-from reco.models import Article, UserProfile, Comment
+from reco.forms import *
 from django.contrib.contenttypes.models import ContentType
+from reco.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -64,6 +64,24 @@ def replycomment(request, commentID, articleID):
             reply.save()
         return HttpResponseRedirect('/article/'+articleID)
 
+@login_required
+def answer(request, questionID):
+    question = Question.objects.get(id = questionID)
+    print(question.id)
+    if request.method == "POST":
+        reply_form = AnswerForm(request.POST)
+        if reply_form.is_valid():
+            try:
+                 answer = question.answer
+                 print(answer.id)
+                 answer_ = reply_form.save(commit=False)
+                 answer.content = answer_.content
+            except:
+                answer = reply_form.save(commit=False)
+            answer.author = UserProfile.objects.get(user = request.user)
+            answer.question = question
+            answer.save()
+    return HttpResponseRedirect('/questionlist/')
 
 def articlelist(request):
     articles = Article.objects.order_by('-date')    
@@ -71,6 +89,22 @@ def articlelist(request):
         'articles' : articles 
     }
     return render(request, 'cpge_tw/article-list.html', context_dict)
+
+def questionlist(request):
+    questions = Question.objects.all()
+    answers = Answer.objects.all()
+    context_dict = {
+        'questions' : questions,
+    }
+    return render(request, 'cpge_tw/questionList.html', context_dict)
+
+def addquestion(request):
+    if request.method == 'POST':
+        question_form = QuestionForm(request.POST)
+        if question_form.is_valid():
+            question = question_form.save()
+            question.save()
+    return HttpResponseRedirect('/questionlist')
 
 @login_required
 def createarticle(request):

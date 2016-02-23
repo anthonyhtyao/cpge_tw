@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from reco.models import UserProfile, Article, Comment
+from reco.models import *
 from tinymce.widgets import TinyMCE
 
 class UserForm(forms.ModelForm):
@@ -32,3 +32,17 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ('content', 'name',)
 
+class QuestionForm(forms.ModelForm):
+    title = forms.CharField(max_length = 128)
+    content = forms.CharField()
+
+    class Meta:
+        model = Question
+        fields = ('title','content')
+
+class AnswerForm(forms.ModelForm):
+    content = forms.CharField()
+
+    class Meta:
+        model = Answer
+        fields = ('content',)

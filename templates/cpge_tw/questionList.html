@@ -1,0 +1,95 @@
+{% extends 'article-base.html' %}
+{% block body_block %}
+
+<div class="container">
+<div class="col-md-12">
+    <ul class="chat">
+    {% for question in questions %}
+                        <li class="left clearfix col-md-10"><span class="chat-img pull-left">
+                            <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{ question.title }}</strong> 
+                                    <small class="text-muted"><span class="glyphicon glyphicon-time"></span>{{ question.date }}</small>
+                                {% if user.is_authenticated and not question.answer %}
+                                    <a class="openAnswer" question-id="{{question.id}}" question-title="{{question.title}}" question-date="{{question.date}}" question-content="{{question.content}}" data-toggle="modal" data-target="#question-modal"><small><span class="glyphicon glyphicon-share-alt"></span></small></a>
+                                {% endif %}
+                                </div>
+                                <p>{{question.content}}</p>
+                            </div>
+                        </li>
+                    {% if question.answer %}
+                        <li class="right clearfix col-md-offset-2 col-md-10"><span class="chat-img pull-right">
+                            <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                        </span>
+                            <div class="chat-body clearfix">
+                                <div class="header col-md-12">
+                                    <strong class="pull-right primary-font">{{ question.answer.author }}</strong>
+                                    <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>{{ question.answer.date}}</small>
+                                {% if user.is_authenticated %}
+                                    <a class="editAnswer pull-right" question-id="{{question.id}}" question-title="{{question.title}}" question-date="{{question.date}}" question-content="{{ question.content }}" answer-content="{{question.answer.content}}" data-toggle="modal" data-target="#question-modal"><small><span class="glyphicon glyphicon-edit"></span></small></a>
+                                {% endif %}
+                                </div>
+                                <p>{{ question.answer.content }}</p>
+                            </div>
+                        </li>
+                    {% endif %}
+
+    {% endfor %}
+    </ul>
+</div>
+<div class="col-md-12">
+    <button id="leaveQuestion">Leave a question</button>
+</div>
+<!--Post question-->
+    <div id="postQuestion" style="display:none" class="well col-md-9">
+        <h4>Leave a question</h4>
+        <form method="post" role="form" action="/addquestion">
+            <div class = "form-group">
+                {% csrf_token %}
+                title:<input id="title" type="text" name="title" maxlength="128">
+                <textarea class="form-controle col-md-12" name="content" rows="2"></textarea>
+            </div>
+            <input type="submit" name="submit" class="btn btn-primary" value="submit">
+        </form>
+    </div>
+
+</div>
+
+<div id="question-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="media-body col-md-12">
+                <h4 id="modal-media-title"></h4>
+                <small class="pull-right" id="modal-media-date"></small>
+                <p id="modal-media-content"></p>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <form id="reply-form" method="post" role="form" action="">
+            <div class="form-group">
+                {% csrf_token %}
+                <textarea id="modal-answer-content"value="" class="form-control" name="content" rows="3" placeholder="Answer"></textarea>
+            </div>
+            <input type="submit" name="submit" class="btn btn-primary" value="Submit">
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+$(document).ready(function () {
+    $("#leaveQuestion").click( function () {
+         $("#postQuestion").toggle();
+    });
+});  
+</script>  
+{% endblock%}
