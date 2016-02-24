@@ -34,4 +34,5 @@ urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls') ),
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^addquestion$', views.addquestion, name='addquestion'),
+    url(r'^contact/$',views.contact, name='contact'),
 ]
