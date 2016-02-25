@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% block body_block %}
-
-<table>
-{% for user in users %}
-<tr>
-<td>{{user.name}}</td><td>{{user.highschool}}</td><td>{{user.prepa}}</td><td>{{user.grandsecole}}</td><td>{{user.user.email}}</td>
-</tr>
-{% endfor %}
-</table>
-
+<center>
+    <table>
+    {% for user in users %}
+        <tr>
+            <td style="width:100px">{{user.name}}</td>
+            <td style="width:80px">{{user.highschool}}</td>
+            <td style="width:80px">{{user.prepa}}</td>
+            <td style="width:80px">{{user.grandsecole}}</td>
+            <td>{{user.user.email}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+</center>
 {% endblock %}

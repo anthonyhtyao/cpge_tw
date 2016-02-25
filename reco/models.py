@@ -11,9 +11,9 @@ class UserProfile(models.Model):
     blog = models.URLField(blank=True)
     name = models.CharField(max_length = 128, blank = True)
     ispublic = models.BooleanField(default=True)
-    highschool = models.CharField(max_length = 128, null = True)
-    prepa = models.CharField(max_length = 128, null = True)
-    grandsecole = models.CharField(max_length = 128, null = True)
+    highschool = models.CharField(max_length = 128, blank=True, null = True)
+    prepa = models.CharField(max_length = 128, blank=True, null = True)
+    grandsecole = models.CharField(max_length = 128, blank=True,  null = True)
 
     def __str__(self):
         return self.user.username
