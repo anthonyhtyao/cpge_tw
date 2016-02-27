@@ -13,7 +13,7 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('blog', 'name',)
+        fields = ('blog', 'name', 'ispublic', 'highschool', 'prepa', 'grandsecole')
 
 class ArticleForm(forms.ModelForm):
     title = forms.CharField(max_length = 128)

@@ -239,3 +239,7 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/')
+
+def contact(request):
+    users = UserProfile.objects.filter(ispublic=True)
+    return render(request, 'cpge_tw/contact.html', {'users':users} )
