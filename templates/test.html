@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+    <div class="ltx">
+        \section{Introduction}
+blabla
+\subsection{What is latex4web?}
+blabla
+\subsubsection*{The star skips automatic increase of section numbers}
+blabla
+\subsubsection{This is numbered}
+...... blabla
+\subsubsection{This one also}
+
+blabla
+\subsection{how to use the soft?}
+blabla
+\section{Next part}
+...
+\subsection{subsection of next part} 
+    </div>
+    <script src="{% static "js/latex4web/main.js" %}"></script>
+{% endblock %}
