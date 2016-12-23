@@ -98,6 +98,7 @@ for(i=0;i<FTTc.length;i=i+2)
 }
 // end of uncompression
 
+$(".ltx").html(ltxParse($(".ltx").html()))
 //===========================================================
 function GetNextToken(txtSource,startAt)
 {

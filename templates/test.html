@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body_block %}
-    <div class="ltxTest">
+    <div class="ltx">
         \section{Introduction}
 blabla
 \subsection{What is latex4web?}
@@ -21,9 +21,4 @@ blabla
 \subsection{subsection of next part} 
     </div>
     <script src="{% static "js/latex4web/main.js" %}"></script>
-    <script>
-        var l = $(".ltxTest").html();
-        console.log(ltxParse(l));
-        $(".ltxTest").html(ltxParse(l));
-    </script>
 {% endblock %}
