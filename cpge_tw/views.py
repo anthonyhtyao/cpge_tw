@@ -243,3 +243,6 @@ def user_logout(request):
 def contact(request):
     users = UserProfile.objects.filter(ispublic=True)
     return render(request, 'cpge_tw/contact.html', {'users':users} )
+
+def test(request):
+    return render(request, 'test.html')

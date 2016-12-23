@@ -53,29 +53,29 @@ var g_strlog = ''
 var g_TOC = '' // Table of contents  
 var g_strDebug = ''
 var g_reftext = '' // stores parameter of \ref or \label commands
-
-var g_header = '<html>\r\n<head>\r\n'
-  g_header = g_header + '<title>LaTeX4Web 1.3 OUTPUT</title>\r\n'
-  g_header = g_header + '<style type=\"text/css\">\r\n<!--\r\n'
-  g_header = g_header + ' body {color: black;  background:\"#FFCC99\";  }\r\n'
-  g_header = g_header + ' div.p { margin-top: 7pt;}\r\n'
-  g_header = g_header + ' td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}\r\n'
-  g_header = g_header + ' td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}\r\n'
-  g_header = g_header + ' td div.norm {line-height:normal;}\r\n'
-  g_header = g_header + ' td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}\r\n'
-  g_header = g_header + ' td.sqrt {border-top:2 solid black;\r\n'
-  g_header = g_header + '          border-left:2 solid black;\r\n'
-  g_header = g_header + '          border-bottom:none;\r\n'
-  g_header = g_header + '          border-right:none;}\r\n'
-  g_header = g_header + ' table.sqrt {border-top:2 solid black;\r\n'
-  g_header = g_header + '             border-left:2 solid black;\r\n'
-  g_header = g_header + '             border-bottom:none;\r\n'
-  g_header = g_header + '             border-right:none;}\r\n'
-  g_header = g_header + '-->\r\n'
-  g_header = g_header + '</style>\r\n'
-
-  g_header = g_header + '</head>\r\n<body>\r\n'
-
+var g_header = '';
+//var g_header = '<html>\r\n<head>\r\n'
+//  g_header = g_header + '<title>LaTeX4Web 1.3 OUTPUT</title>\r\n'
+//  g_header = g_header + '<style type=\"text/css\">\r\n<!--\r\n'
+//  g_header = g_header + ' body {color: black;  background:\"#FFCC99\";  }\r\n'
+//  g_header = g_header + ' div.p { margin-top: 7pt;}\r\n'
+//  g_header = g_header + ' td div.comp { margin-top: -0.6ex; margin-bottom: -1ex;}\r\n'
+//  g_header = g_header + ' td div.comb { margin-top: -0.6ex; margin-bottom: -.6ex;}\r\n'
+//  g_header = g_header + ' td div.norm {line-height:normal;}\r\n'
+//  g_header = g_header + ' td div.hrcomp { line-height: 0.9; margin-top: -0.8ex; margin-bottom: -1ex;}\r\n'
+//  g_header = g_header + ' td.sqrt {border-top:2 solid black;\r\n'
+//  g_header = g_header + '          border-left:2 solid black;\r\n'
+//  g_header = g_header + '          border-bottom:none;\r\n'
+//  g_header = g_header + '          border-right:none;}\r\n'
+//  g_header = g_header + ' table.sqrt {border-top:2 solid black;\r\n'
+//  g_header = g_header + '             border-left:2 solid black;\r\n'
+//  g_header = g_header + '             border-bottom:none;\r\n'
+//  g_header = g_header + '             border-right:none;}\r\n'
+//  g_header = g_header + '-->\r\n'
+//  g_header = g_header + '</style>\r\n'
+//
+//  g_header = g_header + '</head>\r\n<body>\r\n'
+//
 for(i=0;i<256;i++)
 {
   if(EClass[i] > g_MaxClass)
@@ -174,7 +174,6 @@ function GetNextToken(txtSource,startAt)
 //============================================================================
 function ltxParse(inputString)
 {
- 
   var step = 0  // this is purely to avoid infinite loops in case of bugs
   var BracketLevel = 0 // 0 outside any bracket
   var FracLevel = 0
@@ -223,7 +222,6 @@ function ltxParse(inputString)
   g_NextTokenPos=0 
 
   //=============== PARSING OF INPUT STARTS HERE =================================
-
   // Apply user-defined replacements (aliases)
   window.status = 'Replacing aliases...'
   var str = LatexReplaceAliases(inputString) // document.MainForm.input.value)  
@@ -2032,7 +2030,7 @@ function ltxParse(inputString)
 
 
     }// if(nexttokenid!=-1)
-    
+     
     if(BracketLevel > 0)
     {
 
@@ -2188,7 +2186,8 @@ function ltxParse(inputString)
   {
     g_strlog = g_strlog + '\r\n<hr>\r\n<p><h1>Table Of Contents</h1>\r\n'+g_TOC
   }
-  g_strlog = g_strlog + '</body>\r\n</html>\r\n'
+  g_strlog = g_strlog + '\n'
+  //g_strlog = g_strlog + '</body>\r\n</html>\r\n'
 
   window.status = 'Make cross references right....'
   //fill bookmarks with found equation references 
@@ -2199,6 +2198,7 @@ function ltxParse(inputString)
 
 
   window.status = 'Done'
+
   // show the HTML output in the 2nd textbox
   return g_strlog;
 //  document.MainForm.output.value = g_strlog  
