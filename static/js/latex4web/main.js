@@ -2184,7 +2184,7 @@ function ltxParse(inputString)
   // (can be alternately put at the beginning of the output)
   if (g_TOC.length>0)
   {
-    g_strlog = g_strlog + '\r\n<hr>\r\n<p><h1>Table Of Contents</h1>\r\n'+g_TOC
+    g_strlog = '<h1>Table Of Contents</h1>\r\n' + g_TOC + '\n<hr>\n' + g_strlog;
   }
   g_strlog = g_strlog + '\n'
   //g_strlog = g_strlog + '</body>\r\n</html>\r\n'
