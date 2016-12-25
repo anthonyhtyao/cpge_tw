@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block body_block %}
+  {% if currentArticle %}
+    <form id = "article_form" method="post" action="/article/{{currentArticle.id}}/edit" enctype="multipart/form-data">
+  {% else %}
+    <form id = "article_form" method="post" action="/newarticle" enctype="multipart/form-data">
+  {% endif %}
+  {% csrf_token %}
+  <div>
+    <label for="title">Title</label>
+    <input id="title" type="text" name="title" maxlength="128" value="{{currentArticleContent.title}}">
+  <br/>
+  <p><label for="abstract">Abstract : </label></p>
+  <textarea id="newAbstract" type="text" name="abstract" cols ="100" rows="10"} >{{currentArticleContent.abstract}} </textarea>
+  <br/>
+  <p><label for='contentLtx'>Content : </label></p>
+  <textarea id="newContent" type="text" name="contentLtx" cols ="100" rows="30"} >{{currentArticle.contentLtx}} </textarea>
+  <br/>
+  <button type="submit" class="btn btn-default">Save</button>
+  </div>
+</form>
+{% endblock %}

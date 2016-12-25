@@ -5,7 +5,7 @@ from reco.models import *
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
-
+from django.core.urlresolvers import reverse
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -255,3 +255,19 @@ def qAndA(request):
     for line in f:
         s += line
     return render(request, 'cpge_tw/qAndA.html', {'questions':s})
+
+@login_required
+def newArticle(request):
+    returnForm = {}
+    # Gallery is a imgform set
+    if request.method == 'POST':
+        data = request.POST
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            print(form)
+            currentArticle = form.save()
+            return HttpResponseRedirect(reverse('article', args=(str(currentArticle.id),)))
+    articleForm = ArticleForm()
+    # Get no version details by get request
+    returnForm['form'] = articleForm
+    return render(request, 'admin/newArticle.html',returnForm)
