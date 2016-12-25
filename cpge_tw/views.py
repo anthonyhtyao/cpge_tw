@@ -246,3 +246,10 @@ def contact(request):
 
 def test(request):
     return render(request, 'test.html')
+
+def qAndA(request):
+    f = open('static/html/qAndA.html','r')
+    s = ''
+    for line in f:
+        s += line
+    return render(request, 'cpge_tw/qAndA.html', {'questions':s})
