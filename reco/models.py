@@ -47,6 +47,7 @@ class Article(models.Model):
     contentLtx = models.TextField(null=True)
     contentHtml = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
+    abstract = models.CharField(max_length=256,null=True)
     # comments = GenericRelation(Comment, content_type_field = 'content_type',
     #                                     object_id_field = 'object_id')
 

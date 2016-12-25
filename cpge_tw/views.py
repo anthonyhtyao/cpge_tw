@@ -8,11 +8,16 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request, loginMsg=""):
-    article_list = Article.objects.order_by('-date')[:3]
-    for article in article_list:
-        article.content = article.content[:6]
+    articles = Article.objects.order_by('-date')[:3]
+    newArticles = []
+    for a in articles:
+        tmp = {}
+        tmp['title'] = a.title
+        tmp['abstract'] = a.abstract
+        tmp['id'] = a.id 
+        newArticles.append(tmp)
     context_dict = {
-        'newArticles': article_list,
+        'newArticles': newArticles,
         'loginMsg' : loginMsg,
     }
     return render(request, 'cpge_tw/index.html', context_dict)
