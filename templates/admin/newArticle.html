@@ -8,10 +8,10 @@
   {% csrf_token %}
   <div>
     <label for="title">Title</label>
-    <input id="title" type="text" name="title" maxlength="128" value="{{currentArticleContent.title}}">
+    <input id="title" type="text" name="title" maxlength="128" value="{{currentArticle.title}}">
   <br/>
   <p><label for="abstract">Abstract : </label></p>
-  <textarea id="newAbstract" type="text" name="abstract" cols ="100" rows="10"} >{{currentArticleContent.abstract}} </textarea>
+  <textarea id="newAbstract" type="text" name="abstract" cols ="100" rows="10"} >{{currentArticle.abstract}} </textarea>
   <br/>
   <p><label for='contentLtx'>Content : </label></p>
   <textarea id="newContent" type="text" name="contentLtx" cols ="100" rows="30"} >{{currentArticle.contentLtx}} </textarea>
