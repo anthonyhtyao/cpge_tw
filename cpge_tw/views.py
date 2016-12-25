@@ -8,27 +8,29 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request, loginMsg=""):
-    article_list = Article.objects.order_by('-date')[:3]
-    for article in article_list:
-        article.content = article.content[:6]
+    articles = Article.objects.order_by('-date')[:3]
+    newArticles = []
+    for a in articles:
+        tmp = {}
+        tmp['title'] = a.title
+        tmp['abstract'] = a.abstract
+        tmp['id'] = a.id 
+        newArticles.append(tmp)
     context_dict = {
-        'newArticles': article_list,
+        'newArticles': newArticles,
         'loginMsg' : loginMsg,
     }
     return render(request, 'cpge_tw/index.html', context_dict)
 
 def article(request,articleID):
-    article_dict = {}
+    returnForm = {}
     try:
         article = Article.objects.get(id=articleID)
-        article_dict['article'] = article
-        articleType = ContentType.objects.get_for_model(article)
-        comments = Comment.objects.filter(content_type = articleType.id, object_id = articleID).order_by('-date')
-        article_dict['comments'] = comments
-
+        returnForm['title'] = article.title
+        returnForm['content'] = article.contentHtml
     except Article.DoesNotExist:
-        pass
-    return render(request, 'cpge_tw/article.html', article_dict)
+        HttpResponseRedirect('/')
+    return render(request, 'cpge_tw/article.html', returnForm)
 
 def articlecomment(request, articleID):
     if request.method == 'POST':
