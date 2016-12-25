@@ -4,7 +4,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
-
+from reco.functions import simplifyHevea
+import subprocess
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
@@ -41,14 +42,34 @@ class Comment(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=128)
-    author = models.ForeignKey(UserProfile)
-    content = models.TextField(null=True)
+    slg = models.SlugField()
+    author = models.ForeignKey(UserProfile,null=True)
+    contentLtx = models.TextField(null=True)
+    contentHtml = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
     # comments = GenericRelation(Comment, content_type_field = 'content_type',
     #                                     object_id_field = 'object_id')
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.slg = slugify(self.title)
+        ltx = open('tmp/tmp.tex','w')
+        ltx.write(self.contentLtx)
+        ltx.close()
+        subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
+        subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
+        simplifyHevea('tmp/tmp.html','tmp/tmpS.html')
+        f = open('tmp/tmpS.html','r')
+        s = ''
+        for line in f:
+            s += line
+        self.contentHtml = s
+        f.close() 
+        subprocess.call('rm tmp/*.*',shell=True)
+        super(Article, self).save(*args, **kwargs)
+        
 
 class Question(models.Model):
     title = models.CharField(max_length=128)
