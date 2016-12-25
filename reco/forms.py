@@ -17,11 +17,12 @@ class UserProfileForm(forms.ModelForm):
 
 class ArticleForm(forms.ModelForm):
     title = forms.CharField(max_length = 128)
+    abstract = forms.CharField(widget=forms.Textarea, required=False)
     contentLtx = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Article
-        fields = ('title', 'contentLtx')
+        fields = ('title', 'abstract', 'contentLtx')
         #exclude = ["user"]
 
 class CommentForm(forms.ModelForm):
