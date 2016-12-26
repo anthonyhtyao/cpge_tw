@@ -17,11 +17,12 @@ class UserProfileForm(forms.ModelForm):
 
 class ArticleForm(forms.ModelForm):
     title = forms.CharField(max_length = 128)
-    content = forms.CharField(widget = TinyMCE(attrs={'cols': 80, 'rows': 3}))
+    abstract = forms.CharField(widget=forms.Textarea, required=False)
+    contentLtx = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Article
-        fields = ('title', 'content')
+        fields = ('title', 'abstract', 'contentLtx')
         #exclude = ["user"]
 
 class CommentForm(forms.ModelForm):
