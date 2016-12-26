@@ -1,0 +1,15 @@
+{% extends 'admin/editArticleBase.html' %}
+{% block form_block %}
+    <form id = "article_form" method="post" action="/{{page}}/edit" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div>
+  <h1>編輯 {{page}} 頁面 </h1>
+  <p><label for='contentLtx'>Content : </label></p>
+  <textarea id="contentLtx" type="text" name="contentLtx" cols ="100" rows="30">
+    {{contentLtx}}
+  </textarea>
+  <br/>
+  <button type="submit" class="btn btn-default">Save</button>
+  </div>
+  </form>
+{% endblock %}

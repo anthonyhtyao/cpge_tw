@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^addquestion$', views.addquestion, name='addquestion'),
     url(r'^contact/$',views.contact, name='contact'),
+    url(r'^(?P<page>[_,a-z]+)/edit$',views.pageEdit, name='pageEdit'),
 ]

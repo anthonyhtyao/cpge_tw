@@ -250,10 +250,11 @@ def test(request):
     return render(request, 'test.html')
 
 def qAndA(request):
-    f = open('static/html/qAndA.html','r')
+    f = open('static/html/q_and_a.html','r')
     s = ''
     for line in f:
         s += line
+    f.close()
     return render(request, 'cpge_tw/qAndA.html', {'questions':s})
 
 @login_required
@@ -271,3 +272,19 @@ def newArticle(request):
     # Get no version details by get request
     returnForm['form'] = articleForm
     return render(request, 'admin/newArticle.html',returnForm)
+
+@login_required
+def pageEdit(request,page):
+    allowLst = ['q_and_a']
+    if page in allowLst:
+        f = open('static/tex/'+page+'.tex','r')
+        s = ''
+        for line in f:
+            s += line
+        f.close()
+        returnForm = {}
+        returnForm['page'] = page
+        returnForm['contentLtx'] = s
+        return render(request, 'admin/pageEdit.html',returnForm)
+    else:
+        return HttpResponseRedirect('/')
