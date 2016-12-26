@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 {% block body_block %}
+<div class="important">
+目前只支援Latex排版，使用引擎為xelatex，為避免系統出錯，請加入以下兩個package : <br/>
+<b>
+  \usepackage[utf8]{inputenc}<br/>
+  \usepackage{xeCJK}
+</b>
+</div>
   {% if currentArticle %}
     <form id = "article_form" method="post" action="/article/{{currentArticle.id}}/edit" enctype="multipart/form-data">
   {% else %}
@@ -14,15 +21,36 @@
   <textarea id="newAbstract" type="text" name="abstract" cols ="100" rows="10">{{currentArticle.abstract}} </textarea>
   <br/>
   <p><label for='contentLtx'>Content : </label></p>
-  <textarea id="contentLtx" type="text" name="contentLtx" cols ="100" rows="30">{{currentArticle.contentLtx}} </textarea>
+  <textarea id="contentLtx" type="text" name="contentLtx" cols ="100" rows="30">
+  {% if currentArticle %}
+    {{currentArticle.contentLtx}}
+  {% else %}
+    \documentclass[a4paper]{article}
+    \usepackage[utf8]{inputenc}
+    \usepackage{xeCJK}
+    \begin{document}
+    \end{document}
+  {% endif %}
+  </textarea>
   <br/>
   <button type="submit" class="btn btn-default">Save</button>
   </div>
-</form>
-<form action="https://www.overleaf.com/docs?engine=xelatex" method="post" target="_blank">
-<textarea id="snip" style="display:none;" name="snip" rows="10" cols="60">{{currentArticle.contentLtx}} </textarea>
+  </form>
+  <form action="https://www.overleaf.com/docs?engine=xelatex" method="post" target="_blank">
+  <textarea id="snip" style="display:none;" name="snip" rows="10" cols="60">
+  {% if currentArticle %}
+    {{currentArticle.contentLtx}}
+  {% else %}
+    \documentclass[a4paper]{article}
+    \usepackage[utf8]{inputenc}
+    \usepackage{xeCJK}
+    \begin{document}
+    \end{document}
+  {% endif %}
+  </textarea>
   <button type="submit" class="btn btn-default">Open in Overleaf</button>
-</form> 
+  <p class="important">[注意] 這只是在Overleaf預覽,一切在Overleaf上的變更不會被儲存</p>
+  </form> 
 <script>
     $("#contentLtx").change(function() {
         $("#snip").text($("#contentLtx").val());
