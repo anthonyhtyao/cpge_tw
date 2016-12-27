@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from reco.functions import latexToHtml
+import subprocess
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -277,6 +279,13 @@ def newArticle(request):
 def pageEdit(request,page):
     allowLst = ['q_and_a']
     if page in allowLst:
+        if request.method == 'POST':
+            contentLtx = request.POST['contentLtx']
+            latexToHtml(contentLtx)
+            subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
+            subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
+            subprocess.call('rm tmp/*.*', shell=True)
+            return HttpResponseRedirect('/'+page)
         f = open('static/tex/'+page+'.tex','r')
         s = ''
         for line in f:

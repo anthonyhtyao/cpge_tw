@@ -1,3 +1,5 @@
+import subprocess
+
 def simplifyHevea(inputFile, outputFile):
     passLst = ['<!DOC','<html','<meta','<head','<titl','</tit','</hea','<body']
     breakLst = ['<!--F']
@@ -13,3 +15,11 @@ def simplifyHevea(inputFile, outputFile):
             outputf.write(line)
     inputf.close()
     outputf.close()
+
+def latexToHtml(contentLtx):
+    ltx = open('tmp/tmp.tex','w')
+    ltx.write(contentLtx)
+    ltx.close()
+    subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
+    subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
+    simplifyHevea('tmp/tmp.html','tmp/tmpS.html')
