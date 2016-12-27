@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from reco.functions import latexToHtml
+import subprocess
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -250,10 +252,11 @@ def test(request):
     return render(request, 'test.html')
 
 def qAndA(request):
-    f = open('static/html/qAndA.html','r')
+    f = open('static/html/q_and_a.html','r')
     s = ''
     for line in f:
         s += line
+    f.close()
     return render(request, 'cpge_tw/qAndA.html', {'questions':s})
 
 @login_required
@@ -271,3 +274,26 @@ def newArticle(request):
     # Get no version details by get request
     returnForm['form'] = articleForm
     return render(request, 'admin/newArticle.html',returnForm)
+
+@login_required
+def pageEdit(request,page):
+    allowLst = ['q_and_a']
+    if page in allowLst:
+        if request.method == 'POST':
+            contentLtx = request.POST['contentLtx']
+            latexToHtml(contentLtx)
+            subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
+            subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
+            subprocess.call('rm tmp/*.*', shell=True)
+            return HttpResponseRedirect('/'+page)
+        f = open('static/tex/'+page+'.tex','r')
+        s = ''
+        for line in f:
+            s += line
+        f.close()
+        returnForm = {}
+        returnForm['page'] = page
+        returnForm['contentLtx'] = s
+        return render(request, 'admin/pageEdit.html',returnForm)
+    else:
+        return HttpResponseRedirect('/')

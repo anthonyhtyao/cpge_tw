@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
-from reco.functions import simplifyHevea
+from reco.functions import latexToHtml
 import subprocess
 
 class UserProfile(models.Model):
@@ -56,12 +56,7 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         self.slg = slugify(self.title)
-        ltx = open('tmp/tmp.tex','w')
-        ltx.write(self.contentLtx)
-        ltx.close()
-        subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
-        subprocess.run(['hevea','tmp/tmp.tex','-o','tmp/tmp.html'])
-        simplifyHevea('tmp/tmp.html','tmp/tmpS.html')
+        latexToHtml(self.contentLtx)
         f = open('tmp/tmpS.html','r')
         s = ''
         for line in f:
