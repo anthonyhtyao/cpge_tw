@@ -135,4 +135,6 @@ STATICFILES_DIRS = [
     STATIC_PATH,
 ]
 
+AUTH_USER_MODEL = 'reco.User'
+
 LOGIN_URL = '/login'

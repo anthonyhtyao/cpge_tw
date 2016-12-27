@@ -1,28 +1,22 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
 from reco.functions import latexToHtml
 import subprocess
+from django.conf import settings
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+class User(AbstractUser):
     blog = models.URLField(blank=True)
-    name = models.CharField(max_length = 128, blank = True)
     ispublic = models.BooleanField(default=True)
     highschool = models.CharField(max_length = 128, blank=True, null = True)
     prepa = models.CharField(max_length = 128, blank=True, null = True)
     grandsecole = models.CharField(max_length = 128, blank=True,  null = True)
 
-    def __str__(self):
-        return self.user.username
-
-
-
 class Comment(models.Model):
-    author = models.ForeignKey(UserProfile, null=True, blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     content = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -43,7 +37,7 @@ class Comment(models.Model):
 class Article(models.Model):
     title = models.CharField(max_length=128)
     slg = models.SlugField()
-    author = models.ForeignKey(UserProfile,null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,null=True)
     contentLtx = models.TextField(null=True)
     contentHtml = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -77,7 +71,7 @@ class Question(models.Model):
    
 class Answer(models.Model):
     content = models.TextField(null=False)
-    author = models.ForeignKey(UserProfile)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     question = models.OneToOneField(Question)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
 
