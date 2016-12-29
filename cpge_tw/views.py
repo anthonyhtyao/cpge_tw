@@ -297,3 +297,35 @@ def pageEdit(request,page):
         return render(request, 'admin/pageEdit.html',returnForm)
     else:
         return HttpResponseRedirect('/')
+
+@login_required
+def userSettings(request,errMsg="", msg=""):
+    returnForm = {}
+    setMsg(returnForm)
+    if request.method =='POST':
+        data = request.POST
+        request.method=""
+        if not request.user.check_password(data['OldPassword']):
+            errMsg="密碼錯誤"
+            return userSettings(request,errMsg=errMsg)
+        else:
+            if data['InputPassword1'] != "":
+                if data['InputPassword1'] != data['InputPassword2']:
+                    errMsg = "驗證密碼不符"
+                    return userSettings(request,errMsg=errMsg, msg=msg)
+                else:
+                    user = request.user
+                    user.set_password(data['InputPassword1'])
+                    user.save()
+                    user.backend = 'django.contrib.auth.backends.ModelBackend'
+                    login(request, user)
+                    msg += '密碼已更新'
+    returnForm['errMsg'] = errMsg
+    returnForm['msg'] = msg
+    return render(request, 'admin/settings.html', returnForm)
+
+def setMsg(returnForm):
+    returnForm['msg'] = ''
+    returnForm['errMsg'] = ''
+    returnForm['warnMsg'] = ''
+    return returnForm
