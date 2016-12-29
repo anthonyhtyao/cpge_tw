@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^q_and_a/$', views.qAndA, name='qAndA'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
+    url(r'^settings$', views.userSettings, name='userSettings'),
     url(r'^newarticle$', views.newArticle, name='newArticle'),
     url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
     url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editArticle, name='editArticle'),

@@ -125,8 +125,16 @@
                     </li>
 -->
                 {% if user.is_authenticated%}
-                    <li>
-                        <a href="#"><span>{{ user.username }}</span></a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdpwn-toggle" data-toggle="dropdown"><span>{{ user.username }}</span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'userSettings' %}">設置</a>
+                            <li>
+                            <li>
+                                <a href="{% url 'newArticle' %}">新增文章</a>
+                            <li>
+                        </ul>
                     </li>
                 {% endif %}
                 </ul>

@@ -1,19 +1,7 @@
 from django import forms
-from django.contrib.auth.models import User
 from reco.models import *
 from tinymce.widgets import TinyMCE
 
-class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
-
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = ('blog', 'name', 'ispublic', 'highschool', 'prepa', 'grandsecole')
 
 class ArticleForm(forms.ModelForm):
     title = forms.CharField(max_length = 128)
