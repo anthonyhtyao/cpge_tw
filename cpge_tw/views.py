@@ -329,3 +329,12 @@ def setMsg(returnForm):
     returnForm['errMsg'] = ''
     returnForm['warnMsg'] = ''
     return returnForm
+
+def download(request):
+    annalsYears = []
+    for i in range(2004,2018):
+        annalsYears.append(str(i))
+    annalsYears.insert(3,'2006-1')
+    returnForm = {}
+    returnForm['annalsYears'] = annalsYears
+    return render(request, 'cpge_tw/download.html', returnForm)
