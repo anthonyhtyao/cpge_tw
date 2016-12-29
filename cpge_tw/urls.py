@@ -17,6 +17,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from cpge_tw import views
 from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -26,6 +28,7 @@ urlpatterns = [
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^settings$', views.userSettings, name='userSettings'),
+    url(r'^download$', views.download, name='download'),
     url(r'^newarticle$', views.newArticle, name='newArticle'),
     url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
     url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editArticle, name='editArticle'),
@@ -40,4 +43,4 @@ urlpatterns = [
     url(r'^addquestion$', views.addquestion, name='addquestion'),
     url(r'^contact/$',views.contact, name='contact'),
     url(r'^(?P<page>[_,a-z]+)/edit$',views.pageEdit, name='pageEdit'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

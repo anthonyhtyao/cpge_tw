@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body_block %}
+<h3>歷屆考題</h3>
+    <p><a href="media/pdf/cpge_annals.zip">全部下載</a></p>
+{% for year in annalsYears %}
+    <p><a href="media/pdf/cpge_annals_{{year}}.pdf">{{year}}</a></p>
+{% endfor %}
+{% endblock %}
