@@ -52,13 +52,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="about.html">關於</a>
+                        <a href="{% url "page" "about" %}">關於</a>
                     </li>
                     <li>
                         <a href="/articlelist">文章列表</a>
                     </li>
                     <li>
-                        <a href="/q_and_a">Q & A</a>
+                        <a href={% url "page" "q_and_a" %}>Q & A</a>
                     </li>
                     <li>
                         <a href="{% url "download" %}">下載</a>
