@@ -4,7 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
 from tinymce import models as tinymce_models
-from reco.functions import latexToHtml
+from reco.functions import latexToHtml,latexToPdf
 import subprocess
 from django.conf import settings
 
@@ -50,7 +50,8 @@ class Article(models.Model):
 
     def save(self, *args, **kwargs):
         self.slg = slugify(self.title)
-        latexToHtml(self.contentLtx)
+        latexToHtml(self.contentLtx,title=self.title)
+        latexToPdf(self.title)
         f = open('tmp/tmpS.html','r')
         s = ''
         for line in f:
