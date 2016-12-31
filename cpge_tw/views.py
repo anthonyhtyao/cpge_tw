@@ -251,13 +251,13 @@ def contact(request):
 def test(request):
     return render(request, 'test.html')
 
-def qAndA(request):
-    f = open('static/html/q_and_a.html','r')
+def page(request,page):
+    f = open('static/html/'+page+'.html','r')
     s = ''
     for line in f:
         s += line
     f.close()
-    return render(request, 'cpge_tw/qAndA.html', {'questions':s})
+    return render(request, 'cpge_tw/page.html', {'content':s})
 
 @login_required
 def newArticle(request):
@@ -277,26 +277,22 @@ def newArticle(request):
 
 @login_required
 def pageEdit(request,page):
-    allowLst = ['q_and_a']
-    if page in allowLst:
-        if request.method == 'POST':
-            contentLtx = request.POST['contentLtx']
-            latexToHtml(contentLtx)
-            subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
-            subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
-            subprocess.call('rm tmp/*.*', shell=True)
-            return HttpResponseRedirect('/'+page)
-        f = open('static/tex/'+page+'.tex','r')
-        s = ''
-        for line in f:
-            s += line
-        f.close()
-        returnForm = {}
-        returnForm['page'] = page
-        returnForm['contentLtx'] = s
-        return render(request, 'admin/pageEdit.html',returnForm)
-    else:
-        return HttpResponseRedirect('/')
+    if request.method == 'POST':
+        contentLtx = request.POST['contentLtx']
+        latexToHtml(contentLtx)
+        subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
+        subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
+        subprocess.call('rm tmp/*.*', shell=True)
+        return HttpResponseRedirect('/'+page)
+    f = open('static/tex/'+page+'.tex','r')
+    s = ''
+    for line in f:
+        s += line
+    f.close()
+    returnForm = {}
+    returnForm['page'] = page
+    returnForm['contentLtx'] = s
+    return render(request, 'admin/pageEdit.html',returnForm)
 
 @login_required
 def userSettings(request,errMsg="", msg=""):

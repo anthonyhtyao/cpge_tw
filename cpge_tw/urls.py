@@ -24,7 +24,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^test/$', views.test, name='test'),
-    url(r'^q_and_a/$', views.qAndA, name='qAndA'),
+    url(r'^(?P<page>(q_and_a|about){1})/$', views.page, name='page'),
+    url(r'^(?P<page>(q_and_a|about){1})/edit$', views.pageEdit, name='pageEdit'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^settings$', views.userSettings, name='userSettings'),
@@ -42,5 +43,4 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='logout'),
     url(r'^addquestion$', views.addquestion, name='addquestion'),
     url(r'^contact/$',views.contact, name='contact'),
-    url(r'^(?P<page>[_,a-z]+)/edit$',views.pageEdit, name='pageEdit'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
