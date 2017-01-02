@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from reco.functions import latexToHtml
 import subprocess
 from django.conf import settings
+import os
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
