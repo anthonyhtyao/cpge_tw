@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from reco.functions import latexToHtml
 import subprocess
+from django.conf import settings
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -252,7 +253,8 @@ def test(request):
     return render(request, 'test.html')
 
 def page(request,page):
-    f = open('static/html/'+page+'.html','r')
+    url = os.path.join(settings.STATIC_PATH,'html/'+page+'.html')
+    f = open(url,'r',encoding='utf-8')
     s = ''
     for line in f:
         s += line
@@ -284,7 +286,8 @@ def pageEdit(request,page):
         subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
         subprocess.call('rm tmp/*.*', shell=True)
         return HttpResponseRedirect('/'+page)
-    f = open('static/tex/'+page+'.tex','r')
+    url = os.path.join(settings.STATIC_PATH,'tex/'+page+'.tex')
+    f = open(url,'r',encoding='utf-8')
     s = ''
     for line in f:
         s += line
