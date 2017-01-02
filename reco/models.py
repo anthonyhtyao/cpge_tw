@@ -52,13 +52,13 @@ class Article(models.Model):
         self.slg = slugify(self.title)
         latexToHtml(self.contentLtx,title=self.title)
         latexToPdf(self.title)
-        f = open('tmp/tmpS.html','r')
+        f = open(settings.BASE_DIR+'/tmp/tmpS.html','r')
         s = ''
         for line in f:
             s += line
         self.contentHtml = s
         f.close() 
-        subprocess.call('rm tmp/*.*',shell=True)
+        subprocess.call('rm '+settings.BASE_DIR+'/tmp/*.*',shell=True)
         super(Article, self).save(*args, **kwargs)
         
 
