@@ -52,7 +52,7 @@ class Article(models.Model):
         self.slg = slugify(self.title)
         latexToHtml(self.contentLtx,title=self.title)
         latexToPdf(self.title)
-        f = open(settings.BASE_DIR+'/tmp/tmpS.html','r')
+        f = open(settings.BASE_DIR+'/tmp/tmpS.html','r',encoding='utf-8')
         s = ''
         for line in f:
             s += line

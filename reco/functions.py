@@ -24,13 +24,13 @@ def latexToHtml(contentLtx,title=''):
     subprocess.run(['hevea',settings.BASE_DIR+'/tmp/tmp.tex','-o',settings.BASE_DIR+'/tmp/tmp.html'])
     subprocess.run(['hevea',settings.BASE_DIR+'/tmp/tmp.tex','-o',settings.BASE_DIR+'/tmp/tmp.html'])
     if title:
-        subprocess.call('mv '+settings.BASE_DIR+'/tmp/tmp.tex '+settings.BASE_DIR+'/tmp/'+title+'.tex',shell=True)
+        subprocess.call(('mv '+settings.BASE_DIR+'/tmp/tmp.tex '+settings.BASE_DIR+'/tmp/'+title+'.tex').encode('utf8'),shell=True)
     simplifyHevea(settings.BASE_DIR+'/tmp/tmp.html',settings.BASE_DIR+'/tmp/tmpS.html')
 
 def latexToPdf(title):
-    subprocess.call('xelatex -output-directory='+settings.BASE_DIR+'/media/pdf '+settings.BASE_DIR+'/tmp/'+title+'.tex',shell=True)
-    subprocess.call('xelatex -output-directory='+settings.BASE_DIR+'/media/pdf '+settings.BASE_DIR+'/tmp/'+title+'.tex',shell=True)
-    subprocess.call('rm '+settings.BASE_DIR+'/media/pdf/*.log',shell=True)
-    subprocess.call('rm '+settings.BASE_DIR+'/media/pdf/*.out',shell=True)
-    subprocess.call('rm '+settings.BASE_DIR+'/media/pdf/*.toc',shell=True)
-    subprocess.call('rm '+settings.BASE_DIR+'/media/pdf/*.aux',shell=True)
+    subprocess.call(('xelatex -output-directory='+settings.BASE_DIR+'/media/pdf '+settings.BASE_DIR+'/tmp/'+title+'.tex').encode('utf8'),shell=True)
+    subprocess.call(('xelatex -output-directory='+settings.BASE_DIR+'/media/pdf '+settings.BASE_DIR+'/tmp/'+title+'.tex').encode('utf8'),shell=True)
+    subprocess.call(('rm '+settings.BASE_DIR+'/media/pdf/*.log').encode('utf8'),shell=True)
+    subprocess.call(('rm '+settings.BASE_DIR+'/media/pdf/*.out').encode('utf8'),shell=True)
+    subprocess.call(('rm '+settings.BASE_DIR+'/media/pdf/*.toc').encode('utf8'),shell=True)
+    subprocess.call(('rm '+settings.BASE_DIR+'/media/pdf/*.aux').encode('utf8'),shell=True)
