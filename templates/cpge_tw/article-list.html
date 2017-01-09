@@ -12,9 +12,9 @@
             </div>
             <div class="panel-body">
                 <p>
-                {{article.content|safe}}
+                {{article.abstract}}
                 </p>
-                <div> by {{article.author.name}} <a href="/article/{{article.id}}" class="btn btn-default pull-right">Learn More</a></div>
+                <div> by {{article.author.username}} <a href="/article/{{article.id}}" class="btn btn-default pull-right">Learn More</a></div>
                 
             </div>
         </div>
