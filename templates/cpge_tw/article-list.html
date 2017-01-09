@@ -1,0 +1,24 @@
+{% extends 'article-base.html' %}
+{% block article_content %}
+
+{% for article in articles %}
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><i class="fa fa-fw fa-check"></i> {{article.title}}</h4>
+		{% if user == article.author.user %}
+		    <a href="/article/{{article.id}}/edit" class="pull-right"><span class="glyphicon glyphicon-edit"></span>Edit</a>
+		{% endif %}
+            </div>
+            <div class="panel-body">
+                <p>
+                {{article.abstract}}
+                </p>
+                <div> by {{article.author.username}} <a href="/article/{{article.id}}" class="btn btn-default pull-right">Learn More</a></div>
+                
+            </div>
+        </div>
+    </div>
+{% endfor%}
+
+{% endblock %}

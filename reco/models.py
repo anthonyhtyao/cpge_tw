@@ -1,27 +1,80 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
 from django.template.defaultfilters import slugify
+from tinymce import models as tinymce_models
+from reco.functions import latexToHtml,latexToPdf
+import subprocess
+from django.conf import settings
 
-
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-
+class User(AbstractUser):
     blog = models.URLField(blank=True)
-    name = models.CharField(max_length = 128, blank = True)
+    ispublic = models.BooleanField(default=True)
+    highschool = models.CharField(max_length = 128, blank=True, null = True)
+    prepa = models.CharField(max_length = 128, blank=True, null = True)
+    grandsecole = models.CharField(max_length = 128, blank=True,  null = True)
+
+class Comment(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    content = models.TextField(null=True)
+    date = models.DateTimeField(auto_now_add=True, auto_now=False)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    parent = GenericForeignKey('content_type', 'object_id')
+    name = models.CharField(max_length = 128, blank = True, null = True)
 
     def __str__(self):
-        return self.user.username
+        return self.content 
+
+    def save(self, *args, **kwargs):
+        if self.author:
+            self.name = self.author.name
+        if not(self.author or self.name):
+            self.name = 'unknown'
+        super(Comment, self).save(*args, **kwargs)
 
 class Article(models.Model):
     title = models.CharField(max_length=128)
-    author = models.ForeignKey(UserProfile)
-    content = models.TextField(null=True)
+    slg = models.SlugField()
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,null=True)
+    contentLtx = models.TextField(null=True)
+    contentHtml = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
-    slug = models.SlugField()
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.title)
-        super(Article, self).save(*args, **kwargs)
+    abstract = models.CharField(max_length=256,null=True)
+    # comments = GenericRelation(Comment, content_type_field = 'content_type',
+    #                                     object_id_field = 'object_id')
 
     def __str__(self):
-        return self.title 
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.slg = slugify(self.title)
+        latexToHtml(self.contentLtx,title=self.title)
+        latexToPdf(self.title)
+        f = open(settings.BASE_DIR+'/tmp/tmpS.html','r',encoding='utf-8')
+        s = ''
+        for line in f:
+            s += line
+        self.contentHtml = s
+        f.close() 
+        subprocess.call('rm '+settings.BASE_DIR+'/tmp/*.*',shell=True)
+        super(Article, self).save(*args, **kwargs)
+        
+
+class Question(models.Model):
+    title = models.CharField(max_length=128)
+    content = models.TextField(null=False)
+    date = models.DateTimeField(auto_now_add=True, auto_now=False)
+   
+    def __str__(self):
+        return self.title
+   
+class Answer(models.Model):
+    content = models.TextField(null=False)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
+    question = models.OneToOneField(Question)
+    date = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __str__(self):
+        return self.content

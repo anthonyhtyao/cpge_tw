@@ -16,12 +16,30 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from cpge_tw import views
-
+from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
+    url(r'^test/$', views.test, name='test'),
+    url(r'^(?P<page>(q_and_a|about|contact){1})/$', views.page, name='page'),
+    url(r'^(?P<page>(q_and_a|about|contact){1})/edit$', views.pageEdit, name='pageEdit'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
-    url(r'^article/(?P<article_title_slug>[\w\-]+)/$',views.article, name='article'),
-]
+    url(r'^settings$', views.userSettings, name='userSettings'),
+    url(r'^download$', views.download, name='download'),
+    url(r'^newarticle$', views.newArticle, name='newArticle'),
+    url(r'^article/(?P<articleID>[0-9]*)/$',views.article, name='article'),
+    url(r'^article/(?P<articleID>[0-9]*)/edit$',views.editArticle, name='editArticle'),
+    url(r'^article/(?P<articleID>[0-9]*)/articlecomment$',views.articlecomment, name='articlecomment'),
+    url(r'^articlecomment/(?P<commentID>[0-9]*)/(?P<articleID>[0-9]*)/$',views.replycomment, name='replycomment'),
+    url(r'^articlelist/$',views.articlelist, name='articlelist'),
+    url(r'^questionlist/$',views.questionlist, name='questionlist'),
+    url(r'^question/(?P<questionID>[0-9]*)/$', views.answer, name="answer"),
+    url(r'^createarticle$',views.createarticle, name='createarticle'),
+    url(r'^tinymce/', include('tinymce.urls') ),
+    url(r'^logout/$', views.user_logout, name='logout'),
+    url(r'^addquestion$', views.addquestion, name='addquestion'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

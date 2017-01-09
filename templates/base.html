@@ -2,15 +2,36 @@
 <html>
 <head>
     {% load static %}
-    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+
+    <title>{% block title_block %}CPGE TW{% endblock %}</title>
+
+    {# <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet"> #}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <!-- Custom CSS -->
     <link href="{% static "css/modern-business.css" %}" rel="stylesheet">
-    <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <link href="{% static "css/blog-post.css" %}" rel="stylesheet">
     <!-- jQuery -->
-    <script src="{% static "js/jquery.js" %}"></script>
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
+      <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>
+    <script src="{% static "js/functions.js" %}"></script>
+    {{ form.media }}
+    <script>
+    </script>
+    <!-- Script to Activate the Carousel -->
+    <script>
+    $('.carousel').carousel({
+        interval: 5000 //changes the speed
+    })
+    </script>
+
 </head>
 <body>
 
@@ -31,14 +52,21 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="about.html">About</a>
+                        <a href="{% url "page" "about" %}">關於</a>
                     </li>
                     <li>
-                        <a href="services.html">Services</a>
+                        <a href="/articlelist">文章列表</a>
                     </li>
                     <li>
-                        <a href="contact.html">Contact</a>
+                        <a href={% url "page" "q_and_a" %}>Q & A</a>
                     </li>
+                    <li>
+                        <a href="{% url "download" %}">下載</a>
+                    </li>
+                    <li>
+                        <a href="/contact">聯絡我們</a>
+                    </li>
+<!--
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Portfolio <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -93,6 +121,20 @@
                             </li>
                         </ul>
                     </li>
+-->
+                {% if user.is_authenticated%}
+                    <li class="dropdown">
+                        <a href="#" class="dropdpwn-toggle" data-toggle="dropdown"><span>{{ user.username }}</span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{% url 'userSettings' %}">設置</a>
+                            <li>
+                            <li>
+                                <a href="{% url 'newArticle' %}">新增文章</a>
+                            <li>
+                        </ul>
+                    </li>
+                {% endif %}
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -100,19 +142,23 @@
         <!-- /.container -->
     </nav>
 
-    
-        {% block photo_block %}{% endblock %}
-
     <!-- Page Content -->
     <div class="container">
 
         {% block body_block %}{% endblock %}
-
-        <!-- Footer -->
+<p id="back-top"><a href="#"><span></span>To Top</a></p>
+<!-- Footer -->
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <center>
+                        <span>Copyright &copy; CPGE TW 2005-2017</span>
+                        {% if user.is_authenticated %}
+                            <a href="/logout"><span class ="glyphicon glyphicon-log-out"></span></a>
+                        {% else %}
+                            <a id="login-btn" href="#"><span class ="glyphicon glyphicon-log-in"></span></a>
+                        {% endif%}
+                    </center>
                 </div>
             </div>
         </footer>
@@ -120,18 +166,55 @@
     </div>
     <!-- /.container -->
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+<div id="dialog" class="login-dialog" title="Log In">
+    <form id="login_form" action="/login/" method="post">
+        {% csrf_token %}
+        <p> User: </p>
+        <input id="username" name="username" type="text">
+        <br/>
+        <p> Password: </p>
+        <input id="password" name="password" type="password">
+        <br/>
+        <input type="submit" value="Log In">
+    </form>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
 
-    <!-- Script to Activate the Carousel -->
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
-    </script>
+<script>
+    var loginMsg = "{{loginMsg}}";
+    if (loginMsg != "") {
+        alert(loginMsg);
+        window.location = "/";
+        $("dialog").dialog(open);
+    }
+</script>
 
+<script>
+$(document).ready(function(){
+
+	// hide #back-top first
+	$("#back-top").hide();
+	
+	// fade in #back-top
+	$(function () {
+		$(window).scroll(function () {
+			if ($(this).scrollTop() > 100) {
+				$('#back-top').fadeIn();
+			} else {
+				$('#back-top').fadeOut();
+			}
+		});
+
+		// scroll body to 0px on click
+		$('#back-top a').click(function () {
+			$('body,html').animate({
+				scrollTop: 0
+			}, 800);
+			return false;
+		});
+	});
+
+});
+</script>
 </body>
 </html>
