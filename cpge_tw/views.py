@@ -284,8 +284,8 @@ def pageEdit(request,page):
     if request.method == 'POST':
         contentLtx = request.POST['contentLtx']
         latexToHtml(contentLtx)
-        subprocess.call('cp '+TMP+'tmp.tex '+settings.STATIC_PATH+'/tex/'+page+'.tex',shell=True) 
-        subprocess.call('cp '+TMP+'tmpS.html '+settings.STATIC_PATH+'/html/'+page+'.html',shell=True)
+        os.rename(TMP+'tmp.tex',settings.STATIC_PATH+'/tex/'+page+'.tex') 
+        os.rename(TMP+'tmpS.html',settings.STATIC_PATH+'/html/'+page+'.html')
         subprocess.call('rm '+TMP+'*.*', shell=True)
         return HttpResponseRedirect('/'+page)
     url = os.path.join(settings.STATIC_PATH,'tex/'+page+'.tex')
