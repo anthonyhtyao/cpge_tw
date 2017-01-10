@@ -10,6 +10,7 @@ from reco.functions import latexToHtml
 import subprocess
 from django.conf import settings
 import os
+TMP=settings.BASE_DIR + '/tmp/'
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -283,9 +284,9 @@ def pageEdit(request,page):
     if request.method == 'POST':
         contentLtx = request.POST['contentLtx']
         latexToHtml(contentLtx)
-        subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
-        subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
-        subprocess.call('rm tmp/*.*', shell=True)
+        subprocess.call('cp '+TMP+'tmp.tex '+settings.STATIC_PATH+'/tex/'+page+'.tex',shell=True) 
+        subprocess.call('cp '+TMP+'tmpS.html '+settings.STATIC_PATH+'/html/'+page+'.html',shell=True)
+        subprocess.call('rm '+TMP+'*.*', shell=True)
         return HttpResponseRedirect('/'+page)
     url = os.path.join(settings.STATIC_PATH,'tex/'+page+'.tex')
     f = open(url,'r',encoding='utf-8')
