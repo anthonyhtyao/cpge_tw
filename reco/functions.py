@@ -1,6 +1,7 @@
 import subprocess
 from django.conf import settings
 import os
+from shutil import copyfile
 
 def simplifyHevea(inputFile, outputFile):
     passLst = ['<!DOC','<html','<meta','<head','<titl','</tit','</hea','<body']
@@ -25,7 +26,7 @@ def latexToHtml(contentLtx,title=''):
     subprocess.run(['hevea',settings.BASE_DIR+'/tmp/tmp.tex','-o',settings.BASE_DIR+'/tmp/tmp.html'])
     subprocess.run(['hevea',settings.BASE_DIR+'/tmp/tmp.tex','-o',settings.BASE_DIR+'/tmp/tmp.html'])
     if title:
-        os.rename(settings.BASE_DIR+'/tmp/tmp.tex',settings.BASE_DIR+'/tmp/'+title+'.tex')
+        copyfile((settings.BASE_DIR+'/tmp/tmp.tex').encode('utf-8'),(settings.BASE_DIR+'/tmp/'+title+'.tex').encode('utf-8'))
     simplifyHevea(settings.BASE_DIR+'/tmp/tmp.html',settings.BASE_DIR+'/tmp/tmpS.html')
 
 def latexToPdf(title):
