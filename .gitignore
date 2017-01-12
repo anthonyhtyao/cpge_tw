@@ -4,3 +4,5 @@ db.sqlite3
 reco/migrations/
 *.swp
 media/pdf/
+static/html/
+static/tex/
