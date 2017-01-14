@@ -117,7 +117,7 @@ def addquestion(request):
 def createarticle(request):
     if request.method == 'POST':
         article_form = ArticleForm(request.POST)
-        current_user = UserProfile.objects.get(user = request.user)
+        current_user = request.user
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = current_user
@@ -273,6 +273,8 @@ def newArticle(request):
         if form.is_valid():
             print(form)
             currentArticle = form.save()
+            currentArticle.author = request.user
+            currentArticle.save()
             return HttpResponseRedirect(reverse('article', args=(str(currentArticle.id),)))
     articleForm = ArticleForm()
     # Get no version details by get request
