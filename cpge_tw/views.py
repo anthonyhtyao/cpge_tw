@@ -10,6 +10,7 @@ from reco.functions import latexToHtml
 import subprocess
 from django.conf import settings
 import os
+TMP=settings.BASE_DIR + '/tmp/'
 
 def index(request, loginMsg=""):
     articles = Article.objects.order_by('-date')[:3]
@@ -116,7 +117,7 @@ def addquestion(request):
 def createarticle(request):
     if request.method == 'POST':
         article_form = ArticleForm(request.POST)
-        current_user = UserProfile.objects.get(user = request.user)
+        current_user = request.user
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = current_user
@@ -272,6 +273,8 @@ def newArticle(request):
         if form.is_valid():
             print(form)
             currentArticle = form.save()
+            currentArticle.author = request.user
+            currentArticle.save()
             return HttpResponseRedirect(reverse('article', args=(str(currentArticle.id),)))
     articleForm = ArticleForm()
     # Get no version details by get request
@@ -283,9 +286,9 @@ def pageEdit(request,page):
     if request.method == 'POST':
         contentLtx = request.POST['contentLtx']
         latexToHtml(contentLtx)
-        subprocess.call('cp tmp/tmp.tex static/tex/'+page+'.tex',shell=True) 
-        subprocess.call('cp tmp/tmpS.html static/html/'+page+'.html',shell=True)
-        subprocess.call('rm tmp/*.*', shell=True)
+        os.rename(TMP+'tmp.tex',settings.STATIC_PATH+'/tex/'+page+'.tex') 
+        os.rename(TMP+'tmpS.html',settings.STATIC_PATH+'/html/'+page+'.html')
+        subprocess.call('rm '+TMP+'*.*', shell=True)
         return HttpResponseRedirect('/'+page)
     url = os.path.join(settings.STATIC_PATH,'tex/'+page+'.tex')
     f = open(url,'r',encoding='utf-8')
