@@ -4,5 +4,7 @@
 {% block body_block %}
     {{ content | safe }}
 <br/>
+{% if pdfUrl %}
 <a href="{{pdfUrl}}" title="下載{{title}}.pdf"><img src="{% static "img/PDF.jpg" %}" width="40px"></a>
+{% endif %}
 {% endblock %}
