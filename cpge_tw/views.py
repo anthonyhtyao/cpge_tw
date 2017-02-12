@@ -39,6 +39,7 @@ def article(request,articleID):
     returnForm = {}
     try:
         article = Article.objects.get(id=articleID)
+        returnForm['pdfUrl'] = article.pdf.url
         returnForm['title'] = article.title
         returnForm['content'] = article.contentHtml
     except Article.DoesNotExist:
@@ -142,11 +143,12 @@ def editArticle(request,articleID):
     returnForm = {}
     currentArticle = Article.objects.get(id=articleID)
     if request.method == 'POST':
-        article_form = ArticleForm(request.POST)
+        article_form = ArticleForm(request.POST,request.FILES)
         data = request.POST
         if article_form.is_valid():
             currentArticle.title = data['title']
             currentArticle.contentLtx = data['contentLtx']
+            currentArticle.pdf = request.FILES['pdf']
             currentArticle.abstract = data['abstract']
             currentArticle.save()
             return HttpResponseRedirect(reverse('article', args=(str(currentArticle.id),)))
@@ -277,7 +279,7 @@ def newArticle(request):
     # Gallery is a imgform set
     if request.method == 'POST':
         data = request.POST
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST,request.FILES)
         if form.is_valid():
             print(form)
             currentArticle = form.save()
