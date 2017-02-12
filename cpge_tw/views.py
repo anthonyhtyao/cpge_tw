@@ -20,11 +20,19 @@ def index(request, loginMsg=""):
         tmp['title'] = a.title
         tmp['abstract'] = a.abstract
         tmp['id'] = a.id 
+        tmp['author'] = a.author
         newArticles.append(tmp)
     context_dict = {
         'newArticles': newArticles,
         'loginMsg' : loginMsg,
     }
+    url = os.path.join(settings.STATIC_PATH,'html/about.html')
+    f = open(url,'r',encoding='utf-8')
+    s = ''
+    for line in f:
+        s += line
+    f.close()
+    context_dict['about'] = s
     return render(request, 'cpge_tw/index.html', context_dict)
 
 def article(request,articleID):
