@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
     url(r'^test/$', views.test, name='test'),
-    url(r'^(?P<page>(q_and_a|about|contact){1})/$', views.page, name='page'),
+    url(r'^(?P<page>(q_and_a|contact){1})/$', views.page, name='page'),
     url(r'^(?P<page>(q_and_a|about|contact){1})/edit$', views.pageEdit, name='pageEdit'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),

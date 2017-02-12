@@ -4,5 +4,5 @@
 {% block body_block %}
     {{ content | safe }}
 <br/>
-    <a href="/media/pdf/{{title}}.pdf" title="下載{{title}}.pdf"><img src="{% static "img/PDF.jpg" %}" width="40px"></a>
+<a href="{{pdfUrl}}" title="下載{{title}}.pdf"><img src="{% static "img/PDF.jpg" %}" width="40px"></a>
 {% endblock %}
