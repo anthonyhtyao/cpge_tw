@@ -42,6 +42,7 @@ class Article(models.Model):
     contentHtml = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False)
     abstract = models.CharField(max_length=256,null=True)
+    pdf = models.FileField(upload_to='pdf', null=True,blank=True)
     # comments = GenericRelation(Comment, content_type_field = 'content_type',
     #                                     object_id_field = 'object_id')
 

@@ -4,13 +4,14 @@ from tinymce.widgets import TinyMCE
 
 
 class ArticleForm(forms.ModelForm):
+    pdf = forms.FileField()
     title = forms.CharField(max_length = 128)
     abstract = forms.CharField(widget=forms.Textarea, required=False)
     contentLtx = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Article
-        fields = ('title', 'abstract', 'contentLtx')
+        fields = ('pdf','title', 'abstract', 'contentLtx')
         #exclude = ["user"]
 
 class CommentForm(forms.ModelForm):
