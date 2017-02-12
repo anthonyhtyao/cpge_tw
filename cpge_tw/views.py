@@ -39,7 +39,11 @@ def article(request,articleID):
     returnForm = {}
     try:
         article = Article.objects.get(id=articleID)
-        returnForm['pdfUrl'] = article.pdf.url
+        try:
+            pdfUrl = article.pdf.url
+        except:
+            pdfUrl = ''
+        returnForm['pdfUrl'] = pdfUrl
         returnForm['title'] = article.title
         returnForm['content'] = article.contentHtml
     except Article.DoesNotExist:
