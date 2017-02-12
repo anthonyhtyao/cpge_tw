@@ -11,7 +11,7 @@
     <input id="title" type="text" name="title" maxlength="128" value="{{currentArticle.title}}">
   <br/>
     <label for="title">PDF :
-  {% if currentArticle %}<a href='{{currentArticle.pdf.url}}'> Current PDF</a>{% endif %}
+  {% if currentArticle.pdf %}<a href='{{currentArticle.pdf.url}}'> Current PDF</a>{% endif %}
     </label>  
   <input id="pdf" type="file" name="pdf">
   <p><label for="abstract">Abstract : </label></p>
